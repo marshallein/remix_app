@@ -1,7 +1,9 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { MetaFunction, useLoaderData } from "@remix-run/react";
 import { prisma } from "~/db.server";
-
+import { Product } from "@prisma/client";
+import { useCallback, useState } from "react";
+import _ from "lodash"
 
 export const meta: MetaFunction = () => {
     return [
@@ -18,12 +20,23 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
         where: {
             id: Number(params.id)
         }
-    })
+    }) as Product
 
     return { product };
 }
-export default function Product() {
+export default function ProductDetail() {
+    const [quantity, setQuantity] = useState<number>(0);
     const data = useLoaderData<typeof loader>();
+
+    const handleClickButtonQuantity = useCallback((decrease?: boolean) => {
+
+        if (decrease) {
+            setQuantity(_.clamp(quantity - 1, 0, 10));
+        } else {
+            setQuantity(_.clamp(quantity + 1, 0, 10));
+        }
+
+    }, [quantity])
 
     return <>
         <div className="container">
@@ -40,24 +53,25 @@ export default function Product() {
                 <div className="product-details">
                     <div className="product-title">{data?.product?.productName}</div>
                     <div className="product-price">{data?.product?.price}$</div>
-                    <p className="product-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum
-                        vestibulum.</p>
+                    <p className="product-description">{data?.product?.description}</p>
 
                     <h6>Materials:</h6>
                     <p>Lorem, ipsum, dolor</p>
 
                     <div className="color-options">
                         <h6>Color</h6>
-                        <span className="color-swatch bg-danger"></span>
-                        <span className="color-swatch bg-primary"></span>
-                        <span className="color-swatch bg-success"></span>
-                        <span className="color-swatch bg-dark"></span>
+
+                        {data?.product.AvailableColor.map((color, idx) => (
+                            <span key={idx}>
+                                <span className="color-swatch" style={{ backgroundColor: color }}>{color}</span>
+                            </span>
+                        ))}
                     </div>
 
-                    <div className="input-group mb-3">
-                        <button className="btn btn-outline-secondary" type="button" id="decrease-quantity">-</button>
-                        <input type="text" className="form-control text-center" id="quantity" />
-                        <button className="btn btn-outline-secondary" type="button" id="increase-quantity">+</button>
+                    <div className="input-group mb-3" style={{ width: "120px" }}>
+                        <button className="btn btn-outline-secondary" type="button" id="decrease-quantity" onClick={() => handleClickButtonQuantity(true)}>-</button>
+                        <input type="text" className="form-control text-center" id="quantity" value={quantity} />
+                        <button className="btn btn-outline-secondary" type="button" id="increase-quantity" onClick={() => handleClickButtonQuantity(false)}>+</button>
                     </div>
 
                     <div className="d-flex">

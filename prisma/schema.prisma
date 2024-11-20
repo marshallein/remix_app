@@ -14,26 +14,28 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  username String  @unique
-  password String  
-  name     String
-  Cart     Cart[]
-  Order    Order[]
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  name      String
+  Cart      Cart[]
+  Order     Order[]
   createdAt DateTime @default(now())
 }
 
 model Product {
-  id          Int          @id @default(autoincrement())
-  productName String
-  price       Float
-  description String
-  imageString String?
-  Stock       Stock[]
-  CartItems   CartItems[]
-  OrderItems  OrderItems[]
+  id             Int          @id @default(autoincrement())
+  productName    String
+  price          Float
+  description    String
+  AvailableColor String[]
+  imageString    String?
+  Stock          Stock[]
+  CartItems      CartItems[]
+  OrderItems     OrderItems[]
 }
 
+// need to fix this
 model Stock {
   stockId       Int     @id @default(autoincrement())
   stockQuantity Int

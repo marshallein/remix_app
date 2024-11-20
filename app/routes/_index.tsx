@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useNavigate } from "@remix-run/react";
+import { useCallback } from "react";
 import { prisma } from "~/db.server";
 
 export const meta: MetaFunction = () => {
@@ -16,6 +17,14 @@ export const loader = async () => {
 
 export default function Index() {
   const { products } = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
+
+  const handleOnClickBestSellerProduct = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+
+    navigate(`/product/${event.currentTarget.id}`);
+
+  }, [navigate]);
 
   return <>
     {/* <!-- Best Seller Product Section --> */}
@@ -24,7 +33,7 @@ export default function Index() {
       <div className="row text-center">
         {
           products.map((product, idx) => (
-            <div className="col-md-3" key={idx}>
+            <div className="col-md-3" key={idx} id={String(product.id)} tabIndex={0} onKeyDown={() => { }} role="button" onClick={handleOnClickBestSellerProduct}>
               <div className="product-card">
                 <img src={product.imageString || "/aodai1.jpg"} alt="Product 1" className="img-fluid" />
               </div>
