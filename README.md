@@ -25,7 +25,9 @@
 -  [Setup](https://www.prisma.io/dataguide/postgresql/setting-up-a-local-postgresql-database) your database in PostgreSQL
 -  Clone this project (or download it and simply open it in explorer)
 -  Open this project with Visual Studio Code
-   **Important! remember your configuration of PostgreSQL database (port, user, password, schema)**
+
+> **Important! remember your configuration of PostgreSQL database (port, user, password, schema)**
+
 -  create the _'.env'_ file
    ![.env file](https://lh3.googleusercontent.com/pw/AP1GczMHQe7Q4Kj5tspNDyrAf1hgB1BPxsSVgUR9ufUpqibWJ0Df32_bW-lXyx2lRAtwHnyPJTkSaH5PDEQQBOlR7qHOyDdqjvnxnlGVV_4-KGIwzyKvVFw-LB7LQn3fOwNfneH4vt9fR-68-2goJikJaNQy=w376-h510-s-no-gm?authuser=0)
 
