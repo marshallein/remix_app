@@ -1,5 +1,6 @@
 import { Link } from '@remix-run/react';
 import { FC } from 'react';
+import { FaUser, FaShoppingCart } from "react-icons/fa";
 
 type Props = {
    user: {
@@ -36,14 +37,14 @@ const HeaderComponent: FC<Props> = ({ user }) => {
             </div> */}
 
             <Link to={''} className="fas fa-shopping-cart icon">
-               Cart
+               <FaShoppingCart /> Cart
             </Link>
             {/* if user are logged, display the name */}
             {user ? (
-               <div className="fas icon">Hello {user?.name}!</div>
+               <div className="fas icon"> <FaUser /> Hello {user?.name}!</div>
             ) : (
                <Link to={'/login'} className="fas fa-user icon">
-                  User
+                  <FaUser /> Login
                </Link>
             )}
          </div>
