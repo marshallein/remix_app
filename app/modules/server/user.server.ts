@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { prisma } from './db.server';
 import { z } from 'zod';
+export type { Cart, CartItem, Product } from '@prisma/client';
 
 export const infoSchema = {
    email: z.string().email('must be in email format'),
@@ -51,6 +52,66 @@ export const getUserByEmail = async (email: string) => {
 export const getUserInfoById = async (userId: string) => {
    return await prisma.user.findUnique({
       where: { id: Number(userId) },
-      select: { id: true, email: true, name: true },
+   });
+};
+
+export const getUserCartInfo = async (userId: string) => {
+   return await prisma.cart.findUnique({
+      where: {
+         userId: Number(userId),
+      },
+      include: {
+         CartItems: {
+            include: {
+               product: true,
+            },
+         },
+      },
+   });
+};
+
+export async function addShoppingCart(userId: string) {
+   return prisma.cart.create({
+      data: {
+         userId: Number(userId),
+      },
+   });
+}
+
+export type AddToCartType = {
+   productId: number;
+   quantity: number;
+   userId: number;
+};
+
+export const addToCartNotRedirect = async (payload: AddToCartType) => {
+   const { productId, quantity, userId } = payload;
+
+   let [cart] = await Promise.all([getUserCartInfo(String(userId))]);
+
+   if (!cart) {
+      const newCart = await addShoppingCart(String(userId));
+      cart = { ...newCart, CartItems: [] };
+   }
+
+   const cartItem = cart.CartItems.find(
+      (item) => item.product.id === productId,
+   );
+
+   if (cartItem) {
+      const newQuantity = cartItem.quantity + quantity;
+      return await prisma.cartItem.update({
+         data: { quantity: newQuantity },
+         where: {
+            id: cartItem.id,
+         },
+      });
+   }
+   return await prisma.cartItem.create({
+      data: {
+         cart: { connect: { id: cart.id } },
+         product: { connect: { id: productId } },
+         quantity,
+      },
    });
 };

@@ -6,7 +6,11 @@ import {
    Scripts,
    useLoaderData,
 } from '@remix-run/react';
-import type { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
+import type {
+   ActionFunctionArgs,
+   LinksFunction,
+   LoaderFunctionArgs,
+} from '@remix-run/node';
 
 // import "./tailwind.css";
 import './main.css';
@@ -17,7 +21,7 @@ import 'swiper/css/effect-fade';
 import HeaderComponent from './components/Layout/Header';
 import FooterComponent from './components/Layout/Footer';
 import { useEffect } from 'react';
-import { getUser } from './modules/server/auth.server';
+import { getUser, logout } from './modules/server/auth.server';
 
 export const links: LinksFunction = () => [
    {
@@ -39,6 +43,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
    const user = await getUser(request);
 
    return json({ user });
+};
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+   await logout(request);
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {

@@ -26,4 +26,4 @@ export type Tags = 'Modern' | 'Traditional' | 'Long_Dress' | 'Five_Panel';
 
 export const PRODUCTS_PER_PAGE: number = 3;
 
-export const IMAGE_FALL_BACK_URL = "https://placehold.co/600x400"
+export const IMAGE_FALL_BACK_URL = 'https://placehold.co/600x400';

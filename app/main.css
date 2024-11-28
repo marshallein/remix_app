@@ -768,6 +768,9 @@ ul.list-unstyled li button.category-link:hover {
    color: black;
    text-decoration: none;
    font-weight: normal; /* Ensure the text is not bold */
+   display: flex;
+   align-items: center;
+   column-gap: 5px;
 }
 .breadcrumb-item.active {
    color: black;

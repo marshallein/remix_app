@@ -40,7 +40,7 @@ const main = async () => {
          AvailableColor: ['#D91656', '#FFB200'],
          promotion: 'Best_Seller',
          mainImageString: 'https://photos.app.goo.gl/STXKufv6vPwhveRm7',
-         imageSet: ["https://photos.app.goo.gl/STXKufv6vPwhveRm7"],
+         imageSet: ['https://photos.app.goo.gl/STXKufv6vPwhveRm7'],
       },
       {
          productName: 'GIA CAT AO DAI - GOLD SILK VELVET',
@@ -52,7 +52,7 @@ const main = async () => {
          AvailableColor: ['#D91656', '#FFB200'],
          promotion: 'Best_Seller',
          mainImageString: 'https://photos.app.goo.gl/STXKufv6vPwhveRm7',
-         imageSet: ["https://photos.app.goo.gl/STXKufv6vPwhveRm7"],
+         imageSet: ['https://photos.app.goo.gl/STXKufv6vPwhveRm7'],
       },
    ]);
 

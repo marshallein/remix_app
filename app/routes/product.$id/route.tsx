@@ -1,10 +1,20 @@
-import { LoaderFunctionArgs } from '@remix-run/node';
-import { MetaFunction, useLoaderData } from '@remix-run/react';
-import { prisma } from '~/modules/server/db.server';
+import {
+   ActionFunctionArgs,
+   json,
+   LoaderFunctionArgs,
+   redirect,
+} from '@remix-run/node';
+import { MetaFunction, useFetcher, useLoaderData } from '@remix-run/react';
 import { Product } from '@prisma/client';
 import { useCallback, useState } from 'react';
 import _ from 'lodash';
 import { IMAGE_FALL_BACK_URL } from '~/modules/domain';
+import { getProductById } from '~/modules/server/product.server';
+import {
+   addToCartNotRedirect,
+   AddToCartType,
+} from '~/modules/server/user.server';
+import { getUser } from '~/modules/server/auth.server';
 
 export const meta: MetaFunction = () => {
    return [{ title: 'Product Page' }];
@@ -13,24 +23,53 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ params }: LoaderFunctionArgs) => {
    if (!params.id) return;
 
-   const product = (await prisma.product.findFirst({
-      where: {
-         id: Number(params.id),
-      },
-   })) as Product;
+   const product = (await getProductById(Number(params.id))) as Product;
 
    return { product };
 };
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+   const user = await getUser(request);
+
+   const data = await request.formData();
+   const action = data.get('_action');
+   const productId = data.get('id');
+   const quantity = data.get('quantity');
+
+   const payload: AddToCartType = {
+      productId: Number(productId),
+      quantity: Number(quantity),
+      userId: Number(user?.id),
+   };
+
+   switch (action) {
+      case 'addToCart': {
+         await addToCartNotRedirect(payload);
+         break;
+      }
+      case 'buyNow': {
+         await addToCartNotRedirect(payload)
+         return redirect('/cart');
+      }
+      default: {
+         throw new Response('Bad Request', { status: 400 });
+      }
+   }
+   return json({ success: true });
+};
+
 export default function ProductDetail() {
-   const [quantity, setQuantity] = useState<number>(0);
+   const [quantity, setQuantity] = useState<number>(1);
    const data = useLoaderData<typeof loader>();
+
+   const fetcher = useFetcher();
 
    const handleClickButtonQuantity = useCallback(
       (decrease?: boolean) => {
          if (decrease) {
-            setQuantity(_.clamp(quantity - 1, 0, 10));
+            setQuantity(_.clamp(quantity - 1, 1, 10));
          } else {
-            setQuantity(_.clamp(quantity + 1, 0, 10));
+            setQuantity(_.clamp(quantity + 1, 1, 10));
          }
       },
       [quantity],
@@ -55,7 +94,9 @@ export default function ProductDetail() {
                   <div className="product-title">
                      {data?.product?.productName}
                   </div>
-                  <div className="product-price">{data?.product?.price.toLocaleString()}VND</div>
+                  <div className="product-price">
+                     {data?.product?.price.toLocaleString()}VND
+                  </div>
                   <p className="product-description">
                      {data?.product?.description}
                   </p>
@@ -99,6 +140,7 @@ export default function ProductDetail() {
                         type="text"
                         className="form-control text-center"
                         id="quantity"
+                        readOnly
                         value={quantity}
                      />
                      <button
@@ -112,15 +154,51 @@ export default function ProductDetail() {
                   </div>
 
                   <div className="d-flex">
-                     <a href="shoppingcart.html">
-                        <button className="btn btn-danger me-2">
+                     <fetcher.Form method="post">
+                        <input
+                           type="hidden"
+                           name="quantity"
+                           readOnly
+                           value={quantity}
+                        />
+                        <input
+                           type="hidden"
+                           name="id"
+                           value={data?.product?.id}
+                           readOnly
+                        />
+                        <button
+                           className="btn btn-danger me-2"
+                           type="submit"
+                           name="_action"
+                           value="addToCart"
+                        >
                            Add to Cart
                         </button>
-                     </a>
+                     </fetcher.Form>
 
-                     <a href="checkout.html">
-                        <button className="btn btn-secondary">Buy Now</button>
-                     </a>
+                     <fetcher.Form method="post">
+                        <input
+                           type="hidden"
+                           name="quantity"
+                           readOnly
+                           value={quantity}
+                        />
+                        <input
+                           type="hidden"
+                           name="id"
+                           value={data?.product?.id}
+                           readOnly
+                        />
+                        <button
+                           className="btn btn-secondary"
+                           type="submit"
+                           name="_action"
+                           value="buyNow"
+                        >
+                           Buy Now
+                        </button>
+                     </fetcher.Form>
                   </div>
                </div>
             </div>
