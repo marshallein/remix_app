@@ -65,6 +65,9 @@ export const getUserCartInfo = async (userId: string) => {
             include: {
                product: true,
             },
+            orderBy: {
+               productId: 'asc',
+            },
          },
       },
    });
@@ -84,8 +87,20 @@ export type AddToCartType = {
    userId: number;
 };
 
-export const addToCartNotRedirect = async (payload: AddToCartType) => {
+export async function removeFromCart(userId: string, productId: string) {
+   const cart = await getUserCartInfo(userId);
+
+   return prisma.cartItem.deleteMany({
+      where: {
+         cartId: cart!.id,
+         productId: Number(productId),
+      },
+   });
+}
+
+export const addToCart = async (payload: AddToCartType) => {
    const { productId, quantity, userId } = payload;
+   console.log('payload', payload);
 
    let [cart] = await Promise.all([getUserCartInfo(String(userId))]);
 
@@ -94,12 +109,20 @@ export const addToCartNotRedirect = async (payload: AddToCartType) => {
       cart = { ...newCart, CartItems: [] };
    }
 
-   const cartItem = cart.CartItems.find(
-      (item) => item.product.id === productId,
-   );
+   console.log('cart value', cart);
+
+   const cartItem = cart.CartItems.find((item) => item.productId === productId);
+
+   console.log('cartItem value', cartItem);
 
    if (cartItem) {
+      console.log(cartItem, 'have');
+
       const newQuantity = cartItem.quantity + quantity;
+
+      if (newQuantity === 0) {
+         return await removeFromCart(String(userId), String(productId));
+      }
       return await prisma.cartItem.update({
          data: { quantity: newQuantity },
          where: {
@@ -107,6 +130,7 @@ export const addToCartNotRedirect = async (payload: AddToCartType) => {
          },
       });
    }
+
    return await prisma.cartItem.create({
       data: {
          cart: { connect: { id: cart.id } },

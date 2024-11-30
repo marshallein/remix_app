@@ -10,10 +10,7 @@ import { useCallback, useState } from 'react';
 import _ from 'lodash';
 import { IMAGE_FALL_BACK_URL } from '~/modules/domain';
 import { getProductById } from '~/modules/server/product.server';
-import {
-   addToCartNotRedirect,
-   AddToCartType,
-} from '~/modules/server/user.server';
+import { addToCart, AddToCartType } from '~/modules/server/user.server';
 import { getUser } from '~/modules/server/auth.server';
 
 export const meta: MetaFunction = () => {
@@ -44,11 +41,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
    switch (action) {
       case 'addToCart': {
-         await addToCartNotRedirect(payload);
+         await addToCart(payload);
          break;
       }
       case 'buyNow': {
-         await addToCartNotRedirect(payload)
+         await addToCart(payload);
          return redirect('/cart');
       }
       default: {

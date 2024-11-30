@@ -10,7 +10,7 @@ import { useState, useCallback, useEffect } from 'react';
 import Pagination from '~/components/Pagination';
 import SliderCarousel from '~/components/Slider';
 import { prisma } from '~/modules/server/db.server';
-import { PRODUCTS_PER_PAGE } from '~/modules/domain';
+import { IMAGE_FALL_BACK_URL, PRODUCTS_PER_PAGE } from '~/modules/domain';
 import { FaAngleRight } from 'react-icons/fa';
 
 const bannerImage: string[] = [
@@ -106,7 +106,7 @@ export default function ProductsPage() {
                            handleSetTags('Traditional');
                         }}
                      >
-                        {tag === Tags['Traditional'] && <FaAngleRight />}{' '}
+                        {tag === Tags['Traditional'] && <FaAngleRight />}
                         Traditional Ao Dai
                      </button>
                   </li>
@@ -128,7 +128,7 @@ export default function ProductsPage() {
                            handleSetTags('Five_Panel');
                         }}
                      >
-                        {tag === Tags['Five_Panel'] && <FaAngleRight />}{' '}
+                        {tag === Tags['Five_Panel'] && <FaAngleRight />}
                         Five-panel Ao Dai
                      </button>
                   </li>
@@ -208,10 +208,18 @@ export default function ProductsPage() {
                                  <div
                                     className="product-image-placeholder"
                                     style={{
-                                       backgroundImage: `url('${item.mainImageString}')`,
                                        borderRadius: '15px',
                                     }}
-                                 ></div>
+                                 >
+                                    <img
+                                       className="products-product-item"
+                                       src={
+                                          item.mainImageString ||
+                                          IMAGE_FALL_BACK_URL
+                                       }
+                                       alt="product"
+                                    />
+                                 </div>
                                  <h5 className="card-title">
                                     <Link
                                        to={`/product/${item.id}`}

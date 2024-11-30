@@ -541,7 +541,6 @@ h2 {
 /* Product Card styling */
 .product-card {
    background-color: #d7c8c0;
-   padding: 80px;
    border-radius: 10px;
    margin-bottom: 10px;
 }
@@ -632,22 +631,23 @@ h2 {
    border: 1px solid #ddd;
    padding: 20px;
    position: relative;
+   max-height: 547px;
+   box-sizing: border-box;
 }
 .product-image-placeholder {
    background-color: #d7c8c0;
    width: 100%;
-   padding-top: 125%;
    margin-bottom: 15px;
 }
 .sale-badge {
    position: absolute;
-   top: 10px;
+   top: 15px;
    right: 10px;
    background-color: #ff4c4c;
    color: white;
    padding: 5px 10px;
    font-size: 12px;
-   border-radius: 5px;
+   border-radius: 3px;
 }
 
 /* Feedback Title and ON SALES Title */
@@ -817,30 +817,6 @@ ul.list-unstyled li button.category-link:hover {
 .order-detail-title {
    font-weight: bold; /* Chữ đậm */
    color: #000; /* Màu chữ đen */
-}
-
-/* Product Page styling */
-.product-card {
-   background-color: #f7f7f7;
-   border: 1px solid #ddd;
-   padding: 20px;
-   position: relative;
-}
-.product-image-placeholder {
-   background-color: #d7c8c0;
-   width: 100%;
-   padding-top: 125%;
-   margin-bottom: 15px;
-}
-.sale-badge {
-   position: absolute;
-   top: 10px;
-   right: 10px;
-   background-color: #ff4c4c;
-   color: white;
-   padding: 5px 10px;
-   font-size: 12px;
-   border-radius: 5px;
 }
 
 /* Trang product.html */
@@ -1303,4 +1279,13 @@ ol {
    text-decoration: none;
    display: flex;
    align-items: center;
+}
+
+.products-product-item {
+   object-fit: scale-down;
+   width: 100%;
+   height: auto;
+   min-height: 347px;
+   max-height: 347px;
+   border-radius: 3px;
 }
