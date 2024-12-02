@@ -5,8 +5,9 @@ import {
    MetaFunction,
    useLoaderData,
    useNavigate,
+   useSearchParams,
 } from '@remix-run/react';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import Pagination from '~/components/Pagination';
 import SliderCarousel from '~/components/Slider';
 import { prisma } from '~/modules/server/db.server';
@@ -29,12 +30,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
    const tag = url.searchParams.get('tag') || '';
    const sort = url.searchParams.get('sort') || '';
    const page = url.searchParams.get('page') || '';
+   const collectionId = url.searchParams.get('collectionId') || '';
 
    const currentPage = Math.max(Number(page || 1), 1);
 
    const option = {
       where: {
          tags: tag ? (tag as Tags) : undefined,
+         Collection: {
+            collectionCode: collectionId ? collectionId : undefined,
+         },
       },
       orderBy: sort
          ? {
@@ -60,23 +65,38 @@ export default function ProductsPage() {
    const [tag, setTag] = useState<Tags>();
    const [sort, setSort] = useState<Prisma.SortOrder>();
    const navigate = useNavigate();
+   const [queryParams] = useSearchParams();
    const { products, count } = useLoaderData<typeof loader>();
 
-   useEffect(() => {
-      navigate(
-         `/products${tag ? `?tag=${tag}` : ''}${sort ? `&sort=${sort}` : ''}`,
-      );
-   }, [navigate, sort, tag]);
+   // useEffect(() => {
+   //    navigate(
+   //       `/products${tag ? `?tag=${tag}` : ''}${sort ? `&sort=${sort}` : ''}`,
+   //    );
+   // }, [navigate, sort, tag]);
 
-   const handleSetTags = useCallback((tag: Tags) => {
-      //maybe add a little bit logic in here
-      setTag(tag);
-   }, []);
+   const handleSetTags = useCallback(
+      (tag: Tags) => {
+         //maybe add a little bit logic in here
+         setTag(tag);
+         const previousQuery = new URLSearchParams(queryParams);
+         if (previousQuery.has('tag')) previousQuery.delete('tag');
+         previousQuery.append('tag', tag);
+         navigate(`?${previousQuery.toString()}`);
+      },
+      [navigate, queryParams],
+   );
 
-   const handleSetSort = useCallback((sort: Prisma.SortOrder) => {
-      //maybe add a little bit logic in here
-      setSort(sort);
-   }, []);
+   const handleSetSort = useCallback(
+      (sort: Prisma.SortOrder) => {
+         //maybe add a little bit logic in here
+         setSort(sort);
+         const previousQuery = new URLSearchParams(queryParams);
+         if (previousQuery.has('sort')) previousQuery.delete('sort');
+         previousQuery.append('sort', sort);
+         navigate(`?${previousQuery.toString()}`);
+      },
+      [navigate, queryParams],
+   );
 
    const totalPages = Math.ceil(count / PRODUCTS_PER_PAGE);
 
@@ -158,6 +178,7 @@ export default function ProductsPage() {
             <div className="col-md-9">
                <div className="d-flex justify-content-between align-items-center mb-3">
                   <h3>Product Listing</h3>
+
                   <div className="dropdown">
                      <button
                         className="btn btn-secondary dropdown-toggle"
@@ -197,6 +218,7 @@ export default function ProductsPage() {
                </div>
 
                <div className="row">
+                  {sort && <p>Currently sort by {sort}</p>}
                   <p>
                      Displaying {products.length} of {count}
                   </p>
@@ -234,7 +256,11 @@ export default function ProductsPage() {
                                        className="no-underline"
                                     >{`${item.price}$`}</Link>
                                  </p>
-                                 <div className="sale-badge">20% OFF</div>
+                                 {item.salePercent !== 0 && (
+                                    <div className="sale-badge">
+                                       {item.salePercent}% OFF
+                                    </div>
+                                 )}
                                  <div className="d-flex justify-content-center mt-3">
                                     <a href="shoppingcart.html">
                                        <button className="btn btn-danger me-2">

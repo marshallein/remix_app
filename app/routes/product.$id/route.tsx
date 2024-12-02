@@ -6,7 +6,7 @@ import {
 } from '@remix-run/node';
 import { MetaFunction, useFetcher, useLoaderData } from '@remix-run/react';
 import { Product } from '@prisma/client';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import _ from 'lodash';
 import { IMAGE_FALL_BACK_URL } from '~/modules/domain';
 import { getProductById } from '~/modules/server/product.server';
@@ -58,6 +58,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function ProductDetail() {
    const [quantity, setQuantity] = useState<number>(1);
    const data = useLoaderData<typeof loader>();
+   const [displayImage, setDisplayImage] = useState<string>('');
 
    const fetcher = useFetcher();
 
@@ -72,19 +73,38 @@ export default function ProductDetail() {
       [quantity],
    );
 
+   const imagesSet = useMemo(() => {
+      if (data) {
+         return [...data.product.imageSet, data.product.mainImageString]
+      } else {
+         return [IMAGE_FALL_BACK_URL]
+      }
+   }, [data])
+
    return (
       <>
          <div className="container">
             <div className="product-info">
                <div className="product-images">
                   <img
-                     src={data?.product.mainImageString || IMAGE_FALL_BACK_URL}
+                     src={
+                        displayImage !== ''
+                           ? displayImage
+                           : data?.product.mainImageString ||
+                           IMAGE_FALL_BACK_URL
+                     }
                      alt="Main_Product_Image"
                   />
                   <div className="thumbnail-images">
-                     <img src={IMAGE_FALL_BACK_URL} alt="Thumbnail 1" />
-                     <img src={IMAGE_FALL_BACK_URL} alt="Thumbnail 2" />
-                     <img src={IMAGE_FALL_BACK_URL} alt="Thumbnail 3" />
+                     {imagesSet.map((item, idx) => (
+                        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
+                        <img
+                           src={item || IMAGE_FALL_BACK_URL}
+                           onClick={() => setDisplayImage(item)}
+                           key={idx}
+                           alt="Thumbnail 1"
+                        />
+                     ))}
                   </div>
                </div>
                <div className="product-details">

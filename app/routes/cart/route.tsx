@@ -14,6 +14,7 @@ import {
 } from '~/modules/server/user.server';
 import { FaHouse } from 'react-icons/fa6';
 import { FaTrash } from 'react-icons/fa';
+import { IMAGE_FALL_BACK_URL } from '~/modules/domain';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
    const user = await getUser(request);
@@ -90,7 +91,10 @@ export default function CartPage() {
                   >
                      <div className="product-image me-3">
                         <img
-                           src="/aodai1.jpg"
+                           src={
+                              item.product.mainImageString ||
+                              IMAGE_FALL_BACK_URL
+                           }
                            alt="Product"
                            style={{
                               width: '80px',

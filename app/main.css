@@ -890,6 +890,7 @@ ul.list-unstyled li a.category-link:hover {
    background-color: #ddd;
    cursor: pointer;
    border-radius: 10px;
+   object-fit: contain;
 }
 
 .product-details {

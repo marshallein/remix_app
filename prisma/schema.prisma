@@ -29,16 +29,27 @@ model Product {
   productName     String
   sku             String
   price           Float
+  salePercent     Float?     @default(0)
   description     String
   tags            Tags?
   promotion       Promotion?
   AvailableColor  String[]
-  mainImageString String?
+  mainImageString String
   imageSet        String[]
   Stock           Stock[]
 
-  CartItems  CartItem[]
-  OrderItems OrderItems[]
+  CartItems    CartItem[]
+  OrderItems   OrderItems[]
+  Collection   Collection?  @relation(fields: [collectionId], references: [id])
+  collectionId Int?
+}
+
+model Collection {
+  id             Int       @id @default(autoincrement())
+  collectionCode String
+  collectionName String
+  description    String
+  products       Product[]
 }
 
 // need to fix this
