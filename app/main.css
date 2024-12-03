@@ -275,7 +275,7 @@ body {
 
 /* Hero Section */
 .hero {
-   background-image: url('Hinh/poster.jpg'); /* Replace with your image path */
+   background-image: url('/poster.jpg'); /* Replace with your image path */
    background-size: cover;
    background-position: center;
    padding: 80px 20px;
@@ -444,12 +444,7 @@ body {
    margin-bottom: 15px; /* Space between elements */
 }
 
-.form-title {
-   font-size: 1.2rem; /* Smaller font size */
-   font-weight: normal; /* Normal weight */
-}
-
-.btn-submit {
+.contact-us .btn-submit {
    background-color: #4e342e;
    color: white;
    border-radius: 5px;
@@ -460,14 +455,12 @@ body {
 .btn-submit:hover {
    background-color: #3e2723;
 }
-h2 {
-   color: #6f4f37; /* Brown color */
-}
 
 .contact-us h2,
 .contact-us h5,
 .contact-us p {
-   text-align: center; /* Center text */
+   text-align: center;
+   color: #6f4f37; 
 }
 
 .contact-us {
@@ -484,7 +477,7 @@ h2 {
    text-align: left; /* Align left */
 }
 
-.rounded-input {
+.contact-us .rounded-input {
    border-radius: 8px; /* Rounded corners */
    border: 1px solid #770000; /* Light brown border color */
    background-color: #eeeeee; /* Light beige background */
@@ -883,9 +876,17 @@ ul.list-unstyled li a.category-link:hover {
    background-color: #ddd;
    border-radius: 15px;
 }
+
+.thumbnail-images {
+   display: flex;
+   overflow-x: scroll;
+   overflow-y: hidden;
+   column-gap: 10px;
+}
+
 .thumbnail-images img {
-   width: 100px;
-   height: 100px;
+   width: 150px;
+   height: 150px;
    margin-right: 10px;
    background-color: #ddd;
    cursor: pointer;
@@ -908,6 +909,10 @@ ul.list-unstyled li a.category-link:hover {
    color: #f00;
    margin: 10px 0;
    font-size: 20px;
+}
+
+.product-price .text-price span {
+   text-decoration: line-through;
 }
 
 .product-description {

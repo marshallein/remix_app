@@ -31,20 +31,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
    const sort = url.searchParams.get('sort') || '';
    const page = url.searchParams.get('page') || '';
    const collectionId = url.searchParams.get('collectionId') || '';
+   const searchString = url.searchParams.get("search") || ""
 
    const currentPage = Math.max(Number(page || 1), 1);
 
    const option = {
-      where: {
-         tags: tag ? (tag as Tags) : undefined,
-         Collection: {
-            collectionCode: collectionId ? collectionId : undefined,
-         },
-      },
       orderBy: sort
          ? {
-              price: sort as Prisma.SortOrder,
-           }
+            price: sort as Prisma.SortOrder,
+         }
          : undefined,
    };
 
@@ -54,16 +49,40 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
    };
 
    const products = (await prisma.product.findMany({
+      where: {
+         productName: {
+            contains: searchString ? searchString : undefined,
+            mode: "insensitive"
+         },
+         tags: tag ? (tag as Tags) : undefined,
+         Collection: {
+            collectionCode: collectionId ? collectionId : undefined,
+         },
+      },
       ...option,
       ...takeOption,
    })) as Product[];
-   const count = await prisma.product.count(option);
+   
+   const count = await prisma.product.count({
+      where: {
+         productName: {
+            contains: searchString ? searchString : undefined,
+            mode: "insensitive"
+         },
+         tags: tag ? (tag as Tags) : undefined,
+         Collection: {
+            collectionCode: collectionId ? collectionId : undefined,
+         },
+      },
+      ...option
+   });
    return { products, count };
 };
 
 export default function ProductsPage() {
    const [tag, setTag] = useState<Tags>();
    const [sort, setSort] = useState<Prisma.SortOrder>();
+   const [search, setSearch] = useState<string>();
    const navigate = useNavigate();
    const [queryParams] = useSearchParams();
    const { products, count } = useLoaderData<typeof loader>();
@@ -97,6 +116,22 @@ export default function ProductsPage() {
       },
       [navigate, queryParams],
    );
+
+   const handleChangeSearch = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+      const target = event.currentTarget;
+      setSearch(target.value);
+   }, [])
+
+   const onClickSearchButton = useCallback(() => {
+
+      if (search) {
+         const previousQuery = new URLSearchParams(queryParams);
+         if (previousQuery.has('search')) previousQuery.delete('search');
+         previousQuery.append('search', search);
+         navigate(`?${previousQuery.toString()}`);
+      }
+
+   }, [navigate, queryParams, search])
 
    const totalPages = Math.ceil(count / PRODUCTS_PER_PAGE);
 
@@ -176,9 +211,12 @@ export default function ProductsPage() {
             </div>
 
             <div className="col-md-9">
-               <div className="d-flex justify-content-between align-items-center mb-3">
+               <div className="d-flex justify-content-between align-items-center mb-3 gap-3">
                   <h3>Product Listing</h3>
-
+                  <div className="input-group">
+                     <input type="text" name='searchBar' className="form-control" value={search} onChange={(e) => { handleChangeSearch(e) }} placeholder="Search" aria-label="Recipient's username" aria-describedby="button-addon2" />
+                     <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={onClickSearchButton}>Search</button>
+                  </div>
                   <div className="dropdown">
                      <button
                         className="btn btn-secondary dropdown-toggle"

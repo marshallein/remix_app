@@ -4,7 +4,7 @@ import {
    LoaderFunctionArgs,
    redirect,
 } from '@remix-run/node';
-import { useFetcher, useLoaderData } from '@remix-run/react';
+import { Link, useFetcher, useLoaderData } from '@remix-run/react';
 import { getUser } from '~/modules/server/auth.server';
 import {
    addToCart,
@@ -15,6 +15,7 @@ import {
 import { FaHouse } from 'react-icons/fa6';
 import { FaTrash } from 'react-icons/fa';
 import { IMAGE_FALL_BACK_URL } from '~/modules/domain';
+import { useMemo } from 'react';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
    const user = await getUser(request);
@@ -68,6 +69,13 @@ export default function CartPage() {
    const data = useLoaderData<typeof loader>();
    const fetcher = useFetcher();
 
+
+   const totalPrice = useMemo(() => {
+      if (!data) return 0;
+
+      return data.cart?.CartItems.reduce((sum, current) => sum + current.product.price, 0);
+   }, [data])
+
    return (
       <div className="container">
          <div className="breadcrumb">
@@ -98,8 +106,9 @@ export default function CartPage() {
                            alt="Product"
                            style={{
                               width: '80px',
-                              height: '80px',
+                              height: '100px',
                               border: '1px solid #ddd',
+                              objectFit: "contain"
                            }}
                         />
                      </div>
@@ -107,10 +116,9 @@ export default function CartPage() {
                         <p>
                            <strong>{item.product.tags}</strong>
                            <br />
-                           {item.product.productName}
+                           {item.product.sku}
                            <br />
-                           Color: <br />
-                           Size:
+                           {item.product.productName}
                         </p>
                      </div>
                      <div className="ms-auto text-end d-flex flex-column">
@@ -181,14 +189,13 @@ export default function CartPage() {
                   </div>
                ))}
 
-               <a href="product.html" className="btn btn-outline-dark mt-3">
-                  <i className="bi bi-arrow-left"></i> Continue viewing more
-                  products
-               </a>
+               <Link to="/products" className="btn btn-outline-dark mt-3">
+                  Continue viewing more products
+               </Link>
             </div>
 
             <div className="col-md-4">
-               <div className="coupon-code mb-4">
+               {/* <div className="coupon-code mb-4">
                   <h5>COUPON CODE</h5>
                   <p>Please enter coupon code to receive 30% discount</p>
                   <input
@@ -197,26 +204,28 @@ export default function CartPage() {
                      placeholder="Coupon Code"
                   />
                   <button className="btn btn-dark w-100 mt-2">Apply</button>
-               </div>
+               </div> */}
 
                <div className="cart-summary">
                   <h5>Cart Total</h5>
                   <p>
                      Cart Subtotal:{' '}
-                     <span className="float-end">4.000.000 VND</span>
+                     <span className="float-end">{totalPrice?.toLocaleString()}VND</span>
                   </p>
                   <p>
-                     Discount: <span className="float-end">-500.000 VND</span>
+                     Discount: <span className="float-end">100.000 VND</span>
                   </p>
                   <p>
                      Shipping: <span className="float-end">FREE</span>
                   </p>
                   <h5>
-                     Total: <span className="float-end">3.500.000 VND</span>
+                     Total: <span className="float-end">{(totalPrice && (totalPrice - 100000).toLocaleString())}VND</span>
                   </h5>
-                  <a href="checkout.html" className="btn btn-dark w-100 mt-3">
-                     Proceed to payment
-                  </a>
+                  <fetcher.Form method='post'>
+                     <button type='submit' name="_action" value="createOrder" className="btn btn-dark w-100 mt-3">
+                        Proceed to payment
+                     </button>
+                  </fetcher.Form>
                </div>
             </div>
          </div>

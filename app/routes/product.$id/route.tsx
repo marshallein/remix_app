@@ -81,6 +81,15 @@ export default function ProductDetail() {
       }
    }, [data])
 
+   const salePrice = useMemo(() => {
+      if (data?.product.salePercent) {
+         return data.product.price - (data.product.salePercent / 100) * data.product.price
+      } else {
+         return null
+      }
+
+   }, [data?.product.price, data?.product.salePercent])
+
    return (
       <>
          <div className="container">
@@ -112,14 +121,19 @@ export default function ProductDetail() {
                      {data?.product?.productName}
                   </div>
                   <div className="product-price">
-                     {data?.product?.price.toLocaleString()}VND
+                     {salePrice ?
+                        <p className='text-price'>
+                           <span>{data?.product?.price.toLocaleString()}VND</span> {`${salePrice.toLocaleString()}VND`}
+                        </p> :
+                        <p className='text-price'>{data?.product?.price.toLocaleString()}VND</p>
+                     }
                   </div>
                   <p className="product-description">
                      {data?.product?.description}
                   </p>
 
                   <h6>Materials:</h6>
-                  <p>Lorem, ipsum, dolor</p>
+                  <p>100% Premium Cloths</p>
 
                   <div className="color-options">
                      <h6>Color</h6>

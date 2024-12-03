@@ -26,8 +26,8 @@ const HeaderComponent: FC<Props> = ({ user }) => {
             <Link className="nav-link" to={'/products'}>
                Products
             </Link>
-            <a href="about.html">About Us</a>
-            <a href="contact.html">Contact Us</a>
+            <Link to="/aboutUs">About Us</Link>
+            <Link to="/contact">Contact Us</Link>
          </div>
          <div className="search-cart">
             {/* <!-- Search Bar --> */}
