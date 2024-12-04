@@ -29,6 +29,7 @@ const main = async () => {
       },
    ]);
 
+   //Collection
    const { collection } = await seed.collection([
       {
          collectionName: 'ALL YEAR COLLECTION',
@@ -37,6 +38,7 @@ const main = async () => {
       },
    ]);
 
+   //product with collection
    await seed.product(
       [
          {
@@ -128,6 +130,7 @@ const main = async () => {
       },
    );
 
+   //modern tag
    await seed.product([
       {
          productName: 'MAO LUONG AO DAI - RED LACE',
@@ -239,6 +242,202 @@ const main = async () => {
       },
    ]);
 
+   //traditional
+
+   await seed.product([
+      {
+         productName: 'SILK BROCADE AO DAI WITH PEACOCK PRINT',
+         sku: 'AD094',
+         price: 1600000,
+         description:
+            'Inspired by the peacock, it embodies a beauty that is gentle, graceful, and full of proud, majestic elegance, much like the bird itself. With a fresh white color palette and a minimalist silhouette, yet still maintaining a gentle, flowing flare, the peacock motif in a spring garden creates a vibrant spring scene, full of color and harmonious tones. THESILKCHARM wants the ladies to indulge in and wear a product that is both refined and dazzling, while still offering a sense of lightness and ethereal elegance in every drape of the Ao Dai.',
+         tags: 'Traditional',
+         AvailableColor: ['#ffffff'],
+         promotion: 'Best_Seller',
+         mainImageString: '/',
+         imageSet: ['/'],
+      },
+      {
+         productName: 'ELEGANCE OF SPRING',
+         sku: 'AD157AS',
+         price: 1350000,
+         description:
+            'Inspired by the delicate and graceful beauty of traditional Vietnamese Ao Dai, this dress brings together a perfect blend of luxury and gentle elegance. With a 4-tier long sleeve design, it not only preserves the timeless beauty of the Ao Dai but also elevates it with intricate, meticulous details. \nThe high-quality, soft, and breathable fabric enhances the wearer’s silhouette, while providing comfort and ease throughout the day. The elegant color palette makes it suitable for various occasions, from parties and festivals to important events, helping you shine with confidence and grace.',
+         tags: 'Traditional',
+         AvailableColor: ['#111111'],
+         promotion: 'Best_Seller',
+         mainImageString:
+            'https://res.cloudinary.com/dsqxwjvw1/image/upload/v1732896207/ao-dai-truyen-thong-4-ta-tay-dai-ad157-6_cm5u0a.jpg',
+         imageSet: [
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732896715/ao-dai-truyen-thong-4-ta-tay-dai-ad157-3_av1ig6.jpg',
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732896750/ao-dai-truyen-thong-4-ta-tay-dai-ad157-2_bdived.jpg',
+         ],
+      },
+      {
+         productName: 'FLORAL ELEGANCE AO DAI',
+         sku: 'AD136',
+         price: 1700000,
+         description:
+            'The Traditional Ao Dai with Floral Train is a symbol of the graceful and noble beauty in Vietnamese culture. Designed with a soft floral train, this Ao Dai perfectly combines the elegance of tradition with delicate, feminine charm. Every detail on the dress reflects meticulous craftsmanship, from the precise stitching to the intricate floral patterns, creating a beauty that is both luxurious and graceful.\n Made from high-quality, smooth, and breathable fabric, it not only enhances the wearer’s figure but also provides comfort throughout the day. The sophisticated color, refined design, and impeccable tailoring make it the perfect choice for important occasions such as festivals, weddings, or significant events.',
+         tags: 'Traditional',
+         AvailableColor: ['#111111'],
+         promotion: 'Best_Seller',
+         mainImageString:
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732896854/ao-dai-truyen-thong-ta-dinh-hoa-ad136-6_dujdg4.jpg',
+         imageSet: [
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732896922/ao-dai-truyen-thong-ta-dinh-hoa-ad136-3_ritwcr.jpg',
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732896947/ao-dai-truyen-thong-ta-dinh-hoa-ad136_gqyelu.jpg',
+         ],
+      },
+      {
+         productName: 'AO DAI WITH HANDCRAFT FLORAL MOTIF',
+         sku: 'AD134',
+         price: 1700000,
+         description:
+            'The Traditional Ao Dai with Handcrafted Floral Motif is a perfect blend of the intricate beauty of hand-embroidered art and the graceful, refined elegance of traditional Vietnamese attire. Made from high-quality fabric, this Ao Dai offers a soft, comfortable feel while maintaining an air of sophistication and delicacy. \n A standout feature of this Ao Dai is the meticulously hand-embroidered floral motif. Each stitch reflects the craftsmanship and creativity of the artisan. The vibrant, lively floral design brings a striking beauty, while maintaining the graceful, elegant aesthetic that enhances the wearer’s poise.',
+         tags: 'Traditional',
+         AvailableColor: ['...'],
+         promotion: 'Best_Seller',
+         mainImageString:
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732896971/ao-dai-truyen-thong-phoi-hoa-dinh-ta-thu-cong-ad134-sua-1-6_w3gpmq.jpg',
+         imageSet: [
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732896998/ao-dai-truyen-thong-phoi-hoa-dinh-ta-thu-cong-ad134-sua-1-3_xqpwbg.jpg',
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897032/ao-dai-truyen-thong-phoi-hoa-dinh-ta-thu-cong-ad134-sua-1_ktnufh.jpg',
+         ],
+      },
+      {
+         productName: 'SERENE CHARM AO DAI',
+         sku: 'AD026',
+         price: 1295000,
+         description:
+            'With its graceful and soft silhouette on silk fabric, the beauty of Ao Dai is subtly enhanced by the traditional round-neck cut and the fitted waistline, creating a sense of sensuality and allure that is both modest and elegant.\n The soft, flowing elegance is further accentuated by the traditional round-neck cut and the neatly fitted waist, adding a restrained yet captivating charm. More impressively, the interplay of shapes and color blocks on the luxurious silk brocade fabric is uniquely highlighted, radiant yet maintaining the sophistication and femininity of the dress.',
+         tags: 'Traditional',
+         AvailableColor: ['...'],
+         promotion: 'Best_Seller',
+         mainImageString:
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897096/ao-dai-do-co-tron-hoa-tiet-ad026_sjtn2t.jpg',
+         imageSet: [
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897123/ao-dai-do-co-tron-hoa-tiet-ad026-6_ydulxs.jpg',
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897160/ao-dai-do-co-tron-hoa-tiet-ad026-5_j0bpo2.jpg',
+         ],
+      },
+      {
+         productName: 'RADIANT SILK AO DAI',
+         sku: 'AD029',
+         price: 1400000,
+         description:
+            'Effortless elegance meets modern design in this flowing Ao Dai. Crafted from luxurious silk, it drapes like water, creating a graceful silhouette. The minimalist white design is accented with vibrant geometric color-blocking for a contemporary touch. Experience the perfect blend of comfort and style with THESILKCHARM.  Walk with confidence and turn heads wherever you go.',
+
+         tags: 'Traditional',
+         AvailableColor: ['...'],
+         promotion: 'Best_Seller',
+         mainImageString:
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897226/dsc-6243_ihrnxa.jpg',
+         imageSet: [
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897258/dsc-6205_faoari.jpg',
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897291/dsc-6219_l2ltgb.jpg',
+         ],
+      },
+      {
+         productName: 'DIEM KIEU AO DAI',
+         sku: 'AD051',
+         price: 1500000,
+         description:
+            'The Diem Kieu Ao Dai is where traditional beauty meets modern elegance. This exquisite garment embodies the grace and femininity of Vietnamese women, while radiating a timeless sophistication.\nCrafted from luxurious fabrics like silk, brocade, and satin, the Diem Kieu Ao Dai drapes effortlessly, offering both comfort and a touch of shimmer.  Its meticulous design, from the delicate neckline to the flowing hem, flatters every figure.\nThe Diem Kieu Ao Dai is perfect for special occasions – festivals, weddings, and more. It’s a statement piece that allows you to shine with confidence and express your unique style',
+         tags: 'Traditional',
+         AvailableColor: ['...'],
+         promotion: 'Best_Seller',
+         mainImageString:
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897420/ao-dai-truyen-thong-ad046-gam-no-6_zzlxr1.jpg',
+         imageSet: [
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897446/ao-dai-truyen-thong-ad046-gam-no-5_lkvlo5.jpg',
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897475/ao-dai-truyen-thong-ad046-gam-no-8_tkilbv.jpg',
+         ],
+      },
+      {
+         productName: 'ELEGANT TRADITIONAL BROCADE AO DAI WITH BOW',
+         sku: 'AD046',
+         price: 1600000,
+         description:
+            'The ELEGANT TRADITIONAL BROCADE AO DAI WITH BOW is the perfect blend of traditional beauty and modern sophistication. Made from high-quality brocade fabric, this ao dai stands out with its subtle sheen and intricate patterns, creating a timeless beauty that is both classic and captivating. The pristine white color of the dress evokes purity and grace, enhancing the feminine and elegant charm of the wearer.\nThe special highlight of this ao dai is the delicate bow detail, which adds a soft and feminine touch to the design. The bow is placed elegantly at the collar or waist, accentuating the graceful and flowing silhouette of the wearer. With meticulous stitching and graceful, flowing lines, this ao dai exudes luxury and lightness in every movement.',
+
+         tags: 'Traditional',
+         AvailableColor: ['...'],
+         promotion: 'Best_Seller',
+         mainImageString:
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897420/ao-dai-truyen-thong-ad046-gam-no-6_zzlxr1.jpg',
+         imageSet: [
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897446/ao-dai-truyen-thong-ad046-gam-no-5_lkvlo5.jpg',
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897475/ao-dai-truyen-thong-ad046-gam-no-8_tkilbv.jpg',
+         ],
+      },
+      {
+         productName: 'FLOWING BEAUTY AO DAI',
+         sku: 'AD095',
+         price: 1300000,
+         description:
+            "This Elegant Ao Dai embodies a refined and gentle beauty with its sophisticated white base, beautifully accented with vibrant floral patterns that are sharp and lively. The deep green hem adds a harmonious contrast, enhancing the graceful, flowing lines of the dress and accentuating the feminine charm of the wearer.\nCrafted from high-quality, soft, and breathable fabric, this ao dai offers both comfort and elegance, making it ideal for any occasion. Its lightweight material ensures comfort throughout the day, whether you're attending a traditional festival, a cultural event, or a formal gathering.\nChoose this Elegant Ao Dai to express your timeless style, grace, and pride in the rich cultural heritage of Vietnam.",
+
+         tags: 'Traditional',
+         AvailableColor: ['...'],
+         promotion: 'Best_Seller',
+         mainImageString:
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897523/ao-dai-truyen-thong-in-hoa-tiet-6-1_vlq4dq.jpg',
+         imageSet: [
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897553/ao-dai-truyen-thong-in-hoa-tiet-7-1_eyd49d.jpg',
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897591/ao-dai-truyen-thong-in-hoa-tiet-4-1_uxhglh.jpg',
+         ],
+      },
+      {
+         productName: 'GOLDEN RADIANCE AO DAI',
+         sku: 'AD100',
+         price: 1450000,
+         description:
+            "The GOLDEN RADIANCE AO DAI: Where luxury meets tradition. \n This stunning garment, crafted from exquisite gold fabric, embodies the grace and elegance of Vietnamese women.  Its radiant hue symbolizes prosperity and luck, making it perfect for weddings, festivals, and special events.\n Designed for comfort and style, the GOLDEN RADIANCE AO DAI features meticulous tailoring and a flowing silhouette that flatters every figure.\n More than just an outfit, it's a statement piece that will make you shine.",
+
+         tags: 'Traditional',
+         AvailableColor: ['...'],
+         promotion: 'Best_Seller',
+         mainImageString:
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897616/ao-dai-tay-phong-theu-hoa-tiet-ad102-4_mpmrhd.jpg',
+         imageSet: [
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897662/ao-dai-tay-phong-theu-hoa-tiet-ad102-2_ifykk3.jpg',
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732897980/ao-dai-tay-phong-theu-hoa-tiet-ad102-1_osoefm.jpg',
+         ],
+      },
+      {
+         productName: 'LOTUS BLOSSOM AO DAI',
+         sku: 'AD200',
+         price: 1300000,
+         description:
+            "LOTUS BLOSSOM AO DAI - where timeless elegance meets modern sophistication. Inspired by the delicate beauty of the lotus, this ao dai exudes grace and femininity with its vibrant floral prints and flattering silhouette. Crafted from breathable, high-quality fabric for ultimate comfort, it's perfect for any special occasion. Embrace Vietnamese heritage and elevate your style with the LOTUS BLOSSOM AO DAI.",
+         tags: 'Traditional',
+         AvailableColor: ['...'],
+         promotion: 'Best_Seller',
+         mainImageString:
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732898011/ao-dai-lua-trang-phoi-hoa-tiet-hoa-sen-ad112-3_ysgdci.jpg',
+         imageSet: [
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732898035/ao-dai-lua-trang-phoi-hoa-tiet-hoa-sen-ad112-4_a1yy2p.jpg',
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732898069/ao-dai-lua-trang-phoi-hoa-tiet-hoa-sen-ad112_b6vnf8.jpg',
+         ],
+      },
+      {
+         productName: 'ELEGANT BROCADE SILK AO DAI',
+         sku: 'ADLG1',
+         price: 1600000,
+         description:
+            "Traditional Ao Dai Brocade Silk is the perfect choice for those who appreciate the elegance and refinement of traditional attire. Made from high-quality brocade silk, this ao dai offers a soft, comfortable feel while maintaining a sense of luxury and grandeur in every detail.\nWith its classic yet refined design, the AD078 ao dai gracefully accentuates the wearer's soft curves, creating a gentle and feminine silhouette. The brocade silk fabric, with its intricate patterns and refined colors, not only highlights the beauty of the woman but also pays tribute to the rich cultural heritage of Vietnam.\nTraditional Ao Dai Brocade Silk is a perfect blend of timeless tradition and subtle elegance. It is an ideal choice for important occasions, festivals, or sophisticated events, allowing the wearer to stand out with grace and poise.",
+         tags: 'Traditional',
+         AvailableColor: ['...'],
+         promotion: 'Best_Seller',
+         mainImageString:
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732898095/ao-dai-truyen-thong-ad078-lua-gam-5_qg2v1f.jpg',
+         imageSet: [
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732898128/ao-dai-truyen-thong-ad078-lua-gam-4_ujc5ty.jpg',
+            'https://res.cloudinary.com/dxktignzy/image/upload/v1732898156/ao-dai-truyen-thong-ad078-lua-gam-2_slul4e.jpg',
+         ],
+      },
+   ]);
    // Type completion not working? You might want to reload your TypeScript Server to pick up the changes
    console.log('Database seeded successfully!');
 
