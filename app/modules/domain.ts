@@ -27,3 +27,13 @@ export type Tags = 'Modern' | 'Traditional' | 'Long_Dress' | 'Five_Panel';
 export const PRODUCTS_PER_PAGE: number = 9;
 
 export const IMAGE_FALL_BACK_URL = 'https://placehold.co/600x400';
+
+export const generateRandomId = (length = 8) => {
+   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+   let result = '';
+   for (let i = 0; i < length; i++) {
+       const randomIndex = Math.floor(Math.random() * characters.length);
+       result += characters[randomIndex];
+   }
+   return result;
+}

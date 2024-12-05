@@ -16,6 +16,7 @@ import { FaHouse } from 'react-icons/fa6';
 import { FaTrash } from 'react-icons/fa';
 import { IMAGE_FALL_BACK_URL } from '~/modules/domain';
 import { useMemo } from 'react';
+import { createOrder, OrderPayLoad } from '~/modules/server/order.server';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
    const user = await getUser(request);
@@ -31,6 +32,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
    const user = await getUser(request);
+
+   if (!user) {
+      return redirect('/login');
+   }
 
    const data = await request.formData();
    const action = data.get('_action');
@@ -57,6 +62,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
          await removeFromCart(String(user?.id), String(productId));
          break;
       }
+      case "createOrder": {
+         const dataOrder = data.get("data_create_order") || "";
+         const payload = JSON.parse(dataOrder as string) as OrderPayLoad;
+         await createOrder(payload);
+
+         return redirect("/thankyou");
+      }
       default: {
          throw new Response('Bad Request', { status: 400 });
       }
@@ -71,10 +83,33 @@ export default function CartPage() {
 
 
    const totalPrice = useMemo(() => {
-      if (!data) return 0;
+      if (!data.cart) return 0;
 
       return data.cart?.CartItems.reduce((sum, current) => sum + current.product.price, 0);
    }, [data])
+
+   const orderValue = useMemo<string>(() => {
+
+      const { cart } = data
+
+      if (cart) {
+         return JSON.stringify({
+            cartId: cart.id,
+            userId: cart.userId,
+            totalPrice: totalPrice,
+            cartItem: cart.CartItems.map((item) => {
+               return {
+                  productId: item.productId,
+                  quantity: item.quantity,
+                  price: item.product.price
+               }
+            })
+         })
+      } else {
+         return JSON.stringify("");
+      }
+
+   }, [data, totalPrice])
 
    return (
       <div className="container">
@@ -221,11 +256,14 @@ export default function CartPage() {
                   <h5>
                      Total: <span className="float-end">{(totalPrice && (totalPrice - 100000).toLocaleString())}VND</span>
                   </h5>
-                  <fetcher.Form method='post'>
-                     <button type='submit' name="_action" value="createOrder" className="btn btn-dark w-100 mt-3">
-                        Proceed to payment
-                     </button>
-                  </fetcher.Form>
+                  {data.cart && data.cart?.CartItems.length > 0 && (
+                     <fetcher.Form method='post'>
+                        <input type="hidden" name='data_create_order' readOnly value={orderValue} />
+                        <button type='submit' name="_action" value="createOrder" className="btn btn-dark w-100 mt-3">
+                           Proceed to payment
+                        </button>
+                     </fetcher.Form>
+                  )}
                </div>
             </div>
          </div>

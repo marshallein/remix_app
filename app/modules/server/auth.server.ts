@@ -29,8 +29,6 @@ export async function createUserSession(userId: string, redirectTo: string) {
    const session = await storage.getSession();
    session.set('userId', userId);
 
-   console.log(session.data);
-
    return redirect(redirectTo, {
       headers: {
          'Set-Cookie': await storage.commitSession(session),
@@ -50,8 +48,6 @@ export async function register(user: RegisterForm) {
 
    // start to create an user
    const newUser = await createUser(user);
-
-   console.log(newUser);
 
    // this handle if anything is error
    if (!newUser) {

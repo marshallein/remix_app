@@ -28,6 +28,10 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
    const user = await getUser(request);
 
+   if (!user) {
+      return redirect("/login");
+   }
+
    const data = await request.formData();
    const action = data.get('_action');
    const productId = data.get('id');

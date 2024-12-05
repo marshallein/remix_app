@@ -62,7 +62,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       ...option,
       ...takeOption,
    })) as Product[];
-   
+
    const count = await prisma.product.count({
       where: {
          productName: {
@@ -124,12 +124,10 @@ export default function ProductsPage() {
 
    const onClickSearchButton = useCallback(() => {
 
-      if (search) {
-         const previousQuery = new URLSearchParams(queryParams);
-         if (previousQuery.has('search')) previousQuery.delete('search');
-         previousQuery.append('search', search);
-         navigate(`?${previousQuery.toString()}`);
-      }
+      const previousQuery = new URLSearchParams(queryParams);
+      if (previousQuery.has('search')) previousQuery.delete('search');
+      search && previousQuery.append('search', search);
+      navigate(`?${previousQuery.toString()}`);
 
    }, [navigate, queryParams, search])
 

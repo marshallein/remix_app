@@ -36,7 +36,6 @@ export const action: ActionFunction = async ({
       action === 'login'
          ? loginSchema.safeParse({ email, password })
          : registerSchema.safeParse({ email, password, userName, name });
-   console.log(result.error?.flatten());
 
    if (!result.success) {
       const errors = result.error.flatten();

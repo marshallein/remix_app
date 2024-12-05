@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { prisma } from './db.server';
 import { z } from 'zod';
+import { redirect } from '@remix-run/node';
 export type { Cart, CartItem, Product } from '@prisma/client';
 
 export const infoSchema = {
@@ -100,24 +101,25 @@ export async function removeFromCart(userId: string, productId: string) {
 
 export const addToCart = async (payload: AddToCartType) => {
    const { productId, quantity, userId } = payload;
-   console.log('payload', payload);
 
-   let [cart] = await Promise.all([getUserCartInfo(String(userId))]);
+   // eslint-disable-next-line prefer-const
+   let [cart, user] = await Promise.all([
+      getUserCartInfo(String(userId)),
+      getUserInfoById(String(userId)),
+   ]);
+
+   if (!user) {
+      return redirect('/login');
+   }
 
    if (!cart) {
       const newCart = await addShoppingCart(String(userId));
       cart = { ...newCart, CartItems: [] };
    }
 
-   console.log('cart value', cart);
-
    const cartItem = cart.CartItems.find((item) => item.productId === productId);
 
-   console.log('cartItem value', cartItem);
-
    if (cartItem) {
-      console.log(cartItem, 'have');
-
       const newQuantity = cartItem.quantity + quantity;
 
       if (newQuantity === 0) {
