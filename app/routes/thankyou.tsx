@@ -1,12 +1,35 @@
-import { Link } from "@remix-run/react";
+import { json, LoaderFunctionArgs, redirect } from '@remix-run/node';
+import { Link, useLoaderData } from '@remix-run/react';
+import { getUser } from '~/modules/server/auth.server';
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+   const user = await getUser(request);
+   if (!user) {
+      return redirect('/login');
+   }
+
+   return json({ user });
+};
 
 export default function ThankYouPage() {
-    return <main>
-        <div className="thank-you-container">
+   const data = useLoaderData<typeof loader>();
+
+   return (
+      <main>
+         <div className="thank-you-container">
             <div className="checkmark">✔</div>
             <h1>Thank you!</h1>
-            <p>This process took only a few minutes of your time.<br />Thank you Minh Anh; you are so kind! Your contributions are always very helpful.</p>
-            <Link to={"/"}>Back to Home</Link>
-        </div>
-    </main>
+            <p>
+               Your Order have been created, More information will be announced
+               later.
+               <br />
+               Thank you {`${data.user.name}`} for your order. We will contact
+               you soon.
+            </p>
+            <Link className="btn" to={'/'}>
+               Back to Home
+            </Link>
+         </div>
+      </main>
+   );
 }
