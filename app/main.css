@@ -613,6 +613,17 @@ body {
 .feedback-card p {
    margin: 5px 0;
 }
+
+.feedback .customer-name {
+   font-weight: bold;
+}
+
+.feedback .customer-country {
+   color: #777;
+   text-decoration: underline;
+   font-style: italic;
+}
+
 /* Traditional Collection styling */
 .collection-section {
    background-color: transparent;
