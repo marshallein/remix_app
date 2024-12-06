@@ -261,7 +261,7 @@ export default function ProductsPage() {
                   {products.map((item, idx) => (
                      <div className="col-md-4 mb-4" key={idx}>
                         <div className="card product-card">
-                           <Link to={`/product/${item.id}`}>
+                           <Link className='no-underline' to={`/product/${item.id}`}>
                               <div className="card-body text-center">
                                  <div
                                     className="product-image-placeholder"
@@ -270,7 +270,7 @@ export default function ProductsPage() {
                                     }}
                                  >
                                     <img
-                                       className="products-product-item"
+                                       className="products-product-item img-thumbnail"
                                        src={
                                           item.mainImageString ||
                                           IMAGE_FALL_BACK_URL
@@ -279,18 +279,17 @@ export default function ProductsPage() {
                                     />
                                  </div>
                                  <h5 className="card-title">
-                                    <Link
-                                       to={`/product/${item.id}`}
+                                    <p
                                        className="no-underline"
                                     >
                                        {item.productName}
-                                    </Link>
+                                    </p>
                                  </h5>
                                  <p className="card-text">
                                     <Link
                                        to={`/product/${item.id}`}
                                        className="no-underline"
-                                    >{`${item.price}$`}</Link>
+                                    >{`${item.price.toLocaleString()}$`}</Link>
                                  </p>
                                  {item.salePercent !== 0 && (
                                     <div className="sale-badge">

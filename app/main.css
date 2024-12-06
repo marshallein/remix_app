@@ -460,7 +460,7 @@ body {
 .contact-us h5,
 .contact-us p {
    text-align: center;
-   color: #6f4f37; 
+   color: #6f4f37;
 }
 
 .contact-us {
@@ -538,6 +538,20 @@ body {
    margin-bottom: 10px;
 }
 
+.product-card-best-seller :not(img) :hover{
+   transform: translateY(-20px);
+   transition: all 0.2s ease-in-out;
+}
+
+.product-card-text {
+   text-decoration: line-through;
+   color: #dc3545;
+}
+
+.product-card-text-sale {
+   font-size: 20px;
+}
+
 /* Collection section styling */
 .collection-section {
    background-color: #ffffff;
@@ -571,7 +585,15 @@ body {
 }
 .new-collection h2 {
    font-weight: bold;
+   font-size: 60px;
+   font-style: italic;
 }
+
+.new-collection p {
+   font-size: 20px;
+   font-style: oblique;
+}
+
 .new-collection-card {
    background-color: #d7c8c0;
    padding: 50px;
@@ -660,6 +682,13 @@ body {
    position: relative;
    display: inline-block;
    padding-left: 20px;
+}
+
+.on-sales-subtitle {
+   font-style: italic;
+   font-weight: 400;
+   margin-left: 20px;
+   color: #555;
 }
 .feedback-title::before,
 .on-sales-title::before {
@@ -865,8 +894,7 @@ ul.list-unstyled li a.category-link:hover {
 /* Trang product deltal */
 /* Remove underline from Product Name and Price */
 .no-underline {
-   text-decoration: none !important; /* Removes underline */
-   color: inherit; /* Keeps the text color as the default */
+   text-decoration: none !important; 
 }
 .container {
    margin: 40px auto;

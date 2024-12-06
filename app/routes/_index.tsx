@@ -1,7 +1,9 @@
 import type { MetaFunction } from '@remix-run/node';
 import { Link, useLoaderData, useNavigate } from '@remix-run/react';
+import classNames from 'classnames';
 import { useCallback } from 'react';
 import SliderCarousel from '~/components/Slider';
+import SmallSliderCarousel from '~/components/SmallSlider';
 import { IMAGE_FALL_BACK_URL } from '~/modules/domain';
 import { getCollectionInfo } from '~/modules/server/collection.server';
 import {
@@ -55,11 +57,11 @@ export default function Index() {
             <div className="row text-center">
                {bestSellerProduct.map((product, idx) => (
                   <div
-                     className="col-md-3"
+                     className="col-md-3 product-card-best-seller"
                      key={idx}
                      id={String(product.id)}
                      tabIndex={0}
-                     onKeyDown={() => {}}
+                     onKeyDown={() => { }}
                      role="button"
                      onClick={handleOnClickProduct}
                   >
@@ -117,7 +119,7 @@ export default function Index() {
                <div className="container">
                   <div className="row align-items-center">
                      <div className="col-md-6 text-left">
-                        <h2>NEW COLLECTION</h2>
+                        <h2>!NEW COLLECTION!</h2>
                         <p>{collectionInfo.collectionName}</p>
                         <Link
                            to={`/products?collectionId=${collectionInfo.collectionCode}`}
@@ -130,18 +132,7 @@ export default function Index() {
 
                      <div className="col-md-6">
                         <div className="row">
-                           {collections.map((product, idx) => (
-                              <div className="col-4" key={idx}>
-                                 <img
-                                    src={
-                                       product.mainImageString ||
-                                       IMAGE_FALL_BACK_URL
-                                    }
-                                    alt={'item ' + idx}
-                                    className="img-fluid short-image item-1"
-                                 />
-                              </div>
-                           ))}
+                           <SmallSliderCarousel images={collections.map((item) => item.mainImageString)} delay={3000} />
                         </div>
                      </div>
                   </div>
@@ -153,6 +144,7 @@ export default function Index() {
          <section className="on-sales my-5">
             <div className="container">
                <h2 className="on-sales-title">ON SALES</h2>
+               <h4 className='on-sales-subtitle'>Hottest sale of the year!</h4>
                <div className="row container mt-4 align-items-center">
                   {onSaleProduct.map((product, idx) => (
                      <div
@@ -160,7 +152,7 @@ export default function Index() {
                         key={idx}
                         id={String(product.id)}
                         tabIndex={0}
-                        onKeyDown={() => {}}
+                        onKeyDown={() => { }}
                         role="button"
                         onClick={handleOnClickProduct}
                      >
@@ -172,11 +164,18 @@ export default function Index() {
                               alt="Product 1"
                               className="img-fluid"
                            />
+                           {product.salePercent && (<div className="sale-badge">
+                              {product.salePercent}% OFF
+                           </div>)}
                         </div>
                         <p style={{ textAlign: 'center', fontSize: '16px' }}>
                            {product.productName}
                            <br />
-                           {product.price.toLocaleString()}$
+                           <span className={classNames(product.salePercent && "product-card-text")}>{product.price.toLocaleString()}VND</span>
+                           <br />
+                           {product.salePercent && (
+                              <span className='product-card-text-sale'>{(product.price - (product.salePercent / 100) * product.price).toLocaleString()}VND</span>
+                           )}
                         </p>
                      </div>
                   ))}
