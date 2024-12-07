@@ -28,13 +28,14 @@
 
 > **Important! remember your configuration of PostgreSQL database (port, user, password, schema)**
 
--  create the _'.env'_ file
-
+-  create the *'.env'* file
 ![.env file](https://lh3.googleusercontent.com/pw/AP1GczMHQe7Q4Kj5tspNDyrAf1hgB1BPxsSVgUR9ufUpqibWJ0Df32_bW-lXyx2lRAtwHnyPJTkSaH5PDEQQBOlR7qHOyDdqjvnxnlGVV_4-KGIwzyKvVFw-LB7LQn3fOwNfneH4vt9fR-68-2goJikJaNQy=w376-h510-s-no-gm?authuser=0)
 
--  Add DATABASE*URL value to *'.env'\_ file and edit accordingly by the configuration of the PostgreSQL database (this is not your database_url but the database_url should look like this) this is your connection string, more onto that in [here](https://pris.ly/d/connection-strings)
+-  Add DATABASE_URL value to *'.env'* file and edit accordingly by the configuration of the PostgreSQL database (this is not your database_url but the database_url should look like this) this is your connection string, more onto that in [here](https://pris.ly/d/connection-strings)
 
 ![database_url](https://lh3.googleusercontent.com/pw/AP1GczPoOTjJVBoQdRhrCYV5zVLApfKcZiX3OAJELW5Wg8Z16IHSmf4s_oqtSpxrZSIcVRVf54JI8IsC4VLp5AjnlGOZJYj4OooJwdM5gGmLiLek2oUyw6knYH9GjB86YVMGT6ke_yqmLXjpgK0TABHv96cR=w720-h36-s-no-gm?authuser=0)
+
+- Add SESESSION_SECRET="supersecretvalue" to *.env* as well, this will be your session storage key.
 
 -  Open the terminal of the VSC (Visual Studio Code in short):
 
