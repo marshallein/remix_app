@@ -17,6 +17,7 @@ export const meta: MetaFunction = () => {
    return [{ title: 'Product Page' }];
 };
 
+//loader
 export const loader = async ({ params }: LoaderFunctionArgs) => {
    if (!params.id) return;
 
@@ -25,6 +26,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
    return { product };
 };
 
+//action
 export const action = async ({ request }: ActionFunctionArgs) => {
    const user = await getUser(request);
 
@@ -59,6 +61,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
    return json({ success: true });
 };
 
+//component
 export default function ProductDetail() {
    const [quantity, setQuantity] = useState<number>(1);
    const data = useLoaderData<typeof loader>();

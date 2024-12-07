@@ -51,6 +51,8 @@
       `npm install`
    -  run this command to sync the prisma to database:
       `npx prisma db push`
+   -  run this command to setup snapseed:
+      `npx @snaplet/seed init`
    -  run the db seed to add data to the database:
       `npx tsx prisma/seed/seed.ts`
    -  Now you should have everything to start the local server
