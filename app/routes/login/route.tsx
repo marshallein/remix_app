@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FormInput from '~/components/FormInput';
 import {
    ActionFunction,
@@ -39,7 +39,7 @@ export const action: ActionFunction = async ({
 
    if (!result.success) {
       const errors = result.error.flatten();
-      return json({ errors }, { status: 400 });
+      return json({ errors, action: action }, { status: 400 });
    }
 
    switch (action) {
@@ -63,6 +63,12 @@ export default function LoginPage() {
       userName: '',
       name: '',
    });
+
+   useEffect(() => {
+      if (actionData && actionData?.action) {
+         setForm(actionData?.action)
+      }
+   }, [actionData, actionData?.action])
 
    const handleInputChange = (
       event: React.ChangeEvent<HTMLInputElement>,
