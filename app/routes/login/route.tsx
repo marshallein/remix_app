@@ -32,6 +32,9 @@ export const action: ActionFunction = async ({
    const userName = form.get('userName') as string;
    const name = form.get('name') as string;
 
+   console.log("action", email, password, action, userName, name);
+
+
    const result =
       action === 'login'
          ? loginSchema.safeParse({ email, password })
@@ -63,6 +66,10 @@ export default function LoginPage() {
       userName: '',
       name: '',
    });
+
+
+   console.log(actionData);
+
 
    useEffect(() => {
       if (actionData && actionData?.action) {

@@ -12,7 +12,7 @@ export const infoSchema = {
 export const loginSchema = z.object(infoSchema);
 
 export const registerSchema = z.object({
-   username: z.string(),
+   userName: z.string(),
    name: z.string(),
    ...infoSchema,
 });
