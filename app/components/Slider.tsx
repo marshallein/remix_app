@@ -28,7 +28,7 @@ const SliderCarousel: FC<Props> = ({
             <SwiperSlide key={idx}>
                <img
                   src={item}
-                  className="img-fluid"
+                  className=""
                   style={{
                      objectFit: 'cover',
                      height: '472px',

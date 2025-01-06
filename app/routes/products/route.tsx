@@ -134,16 +134,16 @@ export default function ProductsPage() {
    const totalPages = Math.ceil(count / PRODUCTS_PER_PAGE);
 
    return (
-      <div className="container">
+      <div className="">
          <SliderCarousel images={bannerImage} />
          <br />
-         <div className="row">
-            <div className="col-md-3">
+         <div className="">
+            <div className="">
                <h5>Categories</h5>
-               <ul className="list-unstyled">
+               <ul className="">
                   <li>
                      <button
-                        className="category-link"
+                        className=""
                         onClick={() => {
                            handleSetTags('Modern');
                         }}
@@ -154,7 +154,7 @@ export default function ProductsPage() {
                   </li>
                   <li>
                      <button
-                        className="category-link"
+                        className=""
                         onClick={() => {
                            handleSetTags('Traditional');
                         }}
@@ -165,7 +165,7 @@ export default function ProductsPage() {
                   </li>
                   <li>
                      <button
-                        className="category-link"
+                        className=""
                         onClick={() => {
                            handleSetTags('Long_Dress');
                         }}
@@ -176,7 +176,7 @@ export default function ProductsPage() {
                   </li>
                   <li>
                      <button
-                        className="category-link"
+                        className=""
                         onClick={() => {
                            handleSetTags('Five_Panel');
                         }}
@@ -188,7 +188,7 @@ export default function ProductsPage() {
                </ul>
 
                <h5>Price</h5>
-               <ul className="list-unstyled">
+               <ul className="">
                   <li>
                      <input type="checkbox" /> Under 100,000
                   </li>
@@ -208,16 +208,16 @@ export default function ProductsPage() {
                 <p>S | M | L | XL | XXL</p> */}
             </div>
 
-            <div className="col-md-9">
-               <div className="d-flex justify-content-between align-items-center mb-3 gap-3">
+            <div className="">
+               <div className="">
                   <h3>Product Listing</h3>
-                  <div className="input-group">
-                     <input type="text" name='searchBar' className="form-control" value={search} onChange={(e) => { handleChangeSearch(e) }} placeholder="Search" aria-label="Recipient's username" aria-describedby="button-addon2" />
-                     <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={onClickSearchButton}>Search</button>
+                  <div className="">
+                     <input type="text" name='searchBar' className="" value={search} onChange={(e) => { handleChangeSearch(e) }} placeholder="Search" aria-label="Recipient's username" aria-describedby="button-addon2" />
+                     <button className="" type="button" id="button-addon2" onClick={onClickSearchButton}>Search</button>
                   </div>
-                  <div className="dropdown">
+                  <div className="">
                      <button
-                        className="btn btn-secondary dropdown-toggle"
+                        className=""
                         type="button"
                         id="sortDropdown"
                         data-bs-toggle="dropdown"
@@ -226,12 +226,12 @@ export default function ProductsPage() {
                         Sort
                      </button>
                      <ul
-                        className="dropdown-menu"
+                        className=""
                         aria-labelledby="sortDropdown"
                      >
                         <li>
                            <button
-                              className="dropdown-item"
+                              className=""
                               onClick={() => {
                                  handleSetSort('asc');
                               }}
@@ -241,7 +241,7 @@ export default function ProductsPage() {
                         </li>
                         <li>
                            <button
-                              className="dropdown-item"
+                              className=""
                               onClick={() => {
                                  handleSetSort('desc');
                               }}
@@ -253,24 +253,24 @@ export default function ProductsPage() {
                   </div>
                </div>
 
-               <div className="row">
+               <div className="">
                   {sort && <p>Currently sort by {sort}</p>}
                   <p>
                      Displaying {products.length} of {count}
                   </p>
                   {products.map((item, idx) => (
-                     <div className="col-md-4 mb-4" key={idx}>
-                        <div className="card product-card">
+                     <div className="" key={idx}>
+                        <div className="">
                            <Link className='no-underline' to={`/product/${item.id}`}>
-                              <div className="card-body text-center">
+                              <div className="">
                                  <div
-                                    className="product-image-placeholder"
+                                    className=""
                                     style={{
                                        borderRadius: '15px',
                                     }}
                                  >
                                     <img
-                                       className="products-product-item img-thumbnail"
+                                       className=""
                                        src={
                                           item.mainImageString ||
                                           IMAGE_FALL_BACK_URL
@@ -278,32 +278,32 @@ export default function ProductsPage() {
                                        alt="product"
                                     />
                                  </div>
-                                 <h5 className="card-title">
+                                 <h5 className="">
                                     <p
-                                       className="no-underline"
+                                       className=""
                                     >
                                        {item.productName}
                                     </p>
                                  </h5>
-                                 <p className="card-text">
+                                 <p className="">
                                     <Link
                                        to={`/product/${item.id}`}
-                                       className="no-underline"
+                                       className=""
                                     >{`${item.price.toLocaleString()}$`}</Link>
                                  </p>
                                  {item.salePercent !== 0 && (
-                                    <div className="sale-badge">
+                                    <div className="">
                                        {item.salePercent}% OFF
                                     </div>
                                  )}
-                                 <div className="d-flex justify-content-center mt-3">
+                                 <div className="">
                                     <a href="shoppingcart.html">
-                                       <button className="btn btn-danger me-2">
+                                       <button className="">
                                           Add to Cart
                                        </button>
                                     </a>
                                     <a href="checkout.html">
-                                       <button className="btn btn-secondary">
+                                       <button className="">
                                           Buy Now
                                        </button>
                                     </a>

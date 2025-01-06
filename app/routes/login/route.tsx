@@ -85,9 +85,9 @@ export default function LoginPage() {
    };
 
    return (
-      <div className="container vh-95 d-flex justify-content-center align-items-center">
-         <div className="card p-4 shadow" style={{ width: '350px' }}>
-            <h3 className="text-center mb-4">
+      <div className="">
+         <div className="" style={{ width: '350px' }}>
+            <h3 className="">
                {form === 'login' ? 'Login' : 'Register'}
             </h3>
             <form method="POST">
@@ -135,14 +135,14 @@ export default function LoginPage() {
                   type="submit"
                   name="_action"
                   value={form}
-                  className="btn btn-primary w-100"
+                  className=""
                >
                   {form == 'login' ? 'Login' : 'Register'}
                </button>
             </form>
             <button
                onClick={() => setForm(form == 'login' ? 'register' : 'login')}
-               className="btn btn-info w-100 mt-2"
+               className=""
             >
                {form == 'login' ? 'Switch to Register' : 'Switch to Login'}
             </button>

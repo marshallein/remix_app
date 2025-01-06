@@ -12,46 +12,46 @@ type Props = {
 
 const HeaderComponent: FC<Props> = ({ user }) => {
    return (
-      <div className="header">
-         <div className="logo-container">
+      <div className="">
+         <div className="">
             <a href="home.html">
-               <img src="/logo.jpg" alt="Logo" className="logo-img" />
+               <img src="/logo.jpg" alt="Logo" className="" />
             </a>
          </div>
 
-         <div className="nav">
-            <Link className="nav-link" to={'/'}>
+         <div className="">
+            <Link className="" to={'/'}>
                Home
             </Link>
-            <Link className="nav-link" to={'/products'}>
+            <Link className="" to={'/products'}>
                Products
             </Link>
             <Link to="/aboutUs">About Us</Link>
             <Link to="/contact">Contact Us</Link>
          </div>
-         <div className="search-cart">
+         <div className="">
             {/* <!-- Search Bar --> */}
             {/* <div className="search-bar">
                 <input type="text" placeholder="SEARCH" className="form-control" />
                 <i className="fas fa-search search-icon"></i>
             </div> */}
 
-            <Link to={`/cart`} className="fas fa-shopping-cart icon">
+            <Link to={`/cart`} className="">
                <FaShoppingCart /> Cart
             </Link>
             {/* if user are logged, display the name */}
             {user ? (
-               <div className="fas icon">
+               <div className="">
                   {' '}
                   <FaUser /> Hello {user?.name}!
                </div>
             ) : (
-               <Link to={'/login'} className="fas fa-user icon">
+               <Link to={'/login'} className="">
                   <FaUser /> Login
                </Link>
             )}
             {user && (
-               <Link to="/logout" className="fas fa-user icon">
+               <Link to="/logout" className="">
                   <FaSignOutAlt />
                </Link>
             )}

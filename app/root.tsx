@@ -12,15 +12,12 @@ import type {
    LoaderFunctionArgs,
 } from '@remix-run/node';
 
-// import "./tailwind.css";
-import './main.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "./tailwind.css";
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 
 import HeaderComponent from './components/Layout/Header';
 import FooterComponent from './components/Layout/Footer';
-import { useEffect } from 'react';
 import { getUser, logout } from './modules/server/auth.server';
 
 export const links: LinksFunction = () => [
@@ -51,15 +48,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export function Layout({ children }: { children: React.ReactNode }) {
    const data = useLoaderData<typeof loader>();
-
-   useEffect(() => {
-      // Dynamically import Bootstrap's JS only on the clients
-      import(
-         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-         // @ts-ignore
-         'bootstrap/dist/js/bootstrap.bundle'
-      );
-   }, []);
 
    return (
       <html lang="en">

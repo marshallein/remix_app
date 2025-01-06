@@ -99,9 +99,9 @@ export default function ProductDetail() {
 
    return (
       <>
-         <div className="container">
-            <div className="product-info">
-               <div className="product-images">
+         <div className="">
+            <div className="">
+               <div className="">
                   <img
                      src={
                         displayImage !== ''
@@ -111,7 +111,7 @@ export default function ProductDetail() {
                      }
                      alt="Main_Product_Image"
                   />
-                  <div className="thumbnail-images">
+                  <div className="">
                      {imagesSet.map((item, idx) => (
                         // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events
                         <img
@@ -123,32 +123,32 @@ export default function ProductDetail() {
                      ))}
                   </div>
                </div>
-               <div className="product-details">
-                  <div className="product-title">
+               <div className="">
+                  <div className="">
                      {data?.product?.productName}
                   </div>
-                  <div className="product-price">
+                  <div className="">
                      {salePrice ?
-                        <p className='text-price'>
+                        <p className=''>
                            <span>{data?.product?.price.toLocaleString()}VND</span> {`${salePrice.toLocaleString()}VND`}
                         </p> :
-                        <p className='text-price'>{data?.product?.price.toLocaleString()}VND</p>
+                        <p className=''>{data?.product?.price.toLocaleString()}VND</p>
                      }
                   </div>
-                  <p className="product-description">
+                  <p className="">
                      {data?.product?.description}
                   </p>
 
                   <h6>Materials:</h6>
                   <p>100% Premium Cloths</p>
 
-                  <div className="color-options">
+                  <div className="">
                      <h6>Color</h6>
 
                      {data?.product.AvailableColor.map((color, idx) => (
                         <span key={idx}>
                            <span
-                              className="color-swatch"
+                              className=""
                               style={{
                                  backgroundColor: color,
                               }}
@@ -160,13 +160,13 @@ export default function ProductDetail() {
                   </div>
 
                   <div
-                     className="input-group mb-3"
+                     className=""
                      style={{
                         width: '120px',
                      }}
                   >
                      <button
-                        className="btn btn-outline-secondary"
+                        className=""
                         type="button"
                         id="decrease-quantity"
                         onClick={() => handleClickButtonQuantity(true)}
@@ -176,13 +176,13 @@ export default function ProductDetail() {
                      <input
                         name="quantity"
                         type="text"
-                        className="form-control text-center"
+                        className=""
                         id="quantity"
                         readOnly
                         value={quantity}
                      />
                      <button
-                        className="btn btn-outline-secondary"
+                        className=""
                         type="button"
                         id="increase-quantity"
                         onClick={() => handleClickButtonQuantity(false)}
@@ -191,7 +191,7 @@ export default function ProductDetail() {
                      </button>
                   </div>
 
-                  <div className="d-flex">
+                  <div className="">
                      <fetcher.Form method="post">
                         <input
                            type="hidden"
@@ -206,7 +206,7 @@ export default function ProductDetail() {
                            readOnly
                         />
                         <button
-                           className="btn btn-danger me-2"
+                           className=""
                            type="submit"
                            name="_action"
                            value="addToCart"
@@ -229,7 +229,7 @@ export default function ProductDetail() {
                            readOnly
                         />
                         <button
-                           className="btn btn-secondary"
+                           className=""
                            type="submit"
                            name="_action"
                            value="buyNow"

@@ -28,7 +28,7 @@ const SmallSliderCarousel: FC<Props> = ({
                 <SwiperSlide key={idx}>
                     <img
                         src={item}
-                        className="img-thumbnail"
+                        className=""
                         style={{
                             objectFit: 'cover',
                             height: '500px',

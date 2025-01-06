@@ -27,18 +27,18 @@ const Pagination: FC<Props> = ({
 
    return (
       <nav
-         className={['pagination', className].filter(Boolean).join(' ')}
+         className={['', className].filter(Boolean).join(' ')}
          {...attrs}
       >
          {currentPage <= 1 && (
-            <span className="pagination button">
+            <span className="">
                <FaAngleLeft />
                Previous Page
             </span>
          )}
          {currentPage > 1 && (
             <Link
-               className="pagination button link"
+               className=""
                to={`?${previousQuery.toString()}`}
             >
                <FaAngleLeft />
@@ -46,14 +46,14 @@ const Pagination: FC<Props> = ({
             </Link>
          )}
          {currentPage >= totalPages && (
-            <span className="pagination button">
+            <span className="">
                Next Page
                <FaAngleRight />
             </span>
          )}
          {currentPage < totalPages && (
             <Link
-               className="pagination button link"
+               className=""
                to={`?${nextQuery.toString()}`}
             >
                Next Page

@@ -112,27 +112,27 @@ export default function CartPage() {
    }, [data, totalPrice])
 
    return (
-      <div className="container">
-         <div className="breadcrumb">
-            <li className="breadcrumb-item">
+      <div className="">
+         <div className="">
+            <li className="">
                <a href="home.html">
                   <FaHouse />
                   Home
                </a>
             </li>
-            <li className="breadcrumb-item active" aria-current="page">
+            <li className="" aria-current="page">
                Shopping cart
             </li>
          </div>
 
-         <div className="cart-container row">
-            <div className="col-md-8">
+         <div className="">
+            <div className="">
                {data.cart?.CartItems.map((item) => (
                   <div
-                     className="cart-item d-flex align-items-center"
+                     className=""
                      key={item.id}
                   >
-                     <div className="product-image me-3">
+                     <div className="">
                         <img
                            src={
                               item.product.mainImageString ||
@@ -156,8 +156,8 @@ export default function CartPage() {
                            {item.product.productName}
                         </p>
                      </div>
-                     <div className="ms-auto text-end d-flex flex-column">
-                        <div className="d-flex align-items-center justify-content-end">
+                     <div className="">
+                        <div className="">
                            <fetcher.Form method="post">
                               <input
                                  type="hidden"
@@ -169,14 +169,14 @@ export default function CartPage() {
                                  type="submit"
                                  name="_action"
                                  value="decrease"
-                                 className="btn btn-light btn-sm"
+                                 className=""
                               >
                                  -
                               </button>
                            </fetcher.Form>
                            <input
                               type="text"
-                              className="form-control text-center mx-2"
+                              className=""
                               value={item.quantity}
                               readOnly
                               style={{ width: '50px' }}
@@ -192,13 +192,13 @@ export default function CartPage() {
                                  type="submit"
                                  name="_action"
                                  value="increase"
-                                 className="btn btn-light btn-sm"
+                                 className=""
                               >
                                  +
                               </button>
                            </fetcher.Form>
                         </div>
-                        <p className="mt-2">
+                        <p className="">
                            {(
                               item.product.price * item.quantity
                            ).toLocaleString()}
@@ -215,7 +215,7 @@ export default function CartPage() {
                               type="submit"
                               name="_action"
                               value="removeFromCart"
-                              className="btn"
+                              className=""
                            >
                               <FaTrash /> Remove from cart
                            </button>
@@ -224,12 +224,12 @@ export default function CartPage() {
                   </div>
                ))}
 
-               <Link to="/products" className="btn btn-outline-dark mt-3">
+               <Link to="/products" className="">
                   Continue viewing more products
                </Link>
             </div>
 
-            <div className="col-md-4">
+            <div className="">
                {/* <div className="coupon-code mb-4">
                   <h5>COUPON CODE</h5>
                   <p>Please enter coupon code to receive 30% discount</p>
@@ -241,25 +241,25 @@ export default function CartPage() {
                   <button className="btn btn-dark w-100 mt-2">Apply</button>
                </div> */}
 
-               <div className="cart-summary">
+               <div className="">
                   <h5>Cart Total</h5>
                   <p>
                      Cart Subtotal:{' '}
-                     <span className="float-end">{totalPrice?.toLocaleString()}VND</span>
+                     <span className="">{totalPrice?.toLocaleString()}VND</span>
                   </p>
                   <p>
-                     Discount: <span className="float-end">100.000 VND</span>
+                     Discount: <span className="">100.000 VND</span>
                   </p>
                   <p>
-                     Shipping: <span className="float-end">FREE</span>
+                     Shipping: <span className="">FREE</span>
                   </p>
                   <h5>
-                     Total: <span className="float-end">{(totalPrice && (totalPrice - 100000).toLocaleString())}VND</span>
+                     Total: <span className="">{(totalPrice && (totalPrice - 100000).toLocaleString())}VND</span>
                   </h5>
                   {data.cart && data.cart?.CartItems.length > 0 && (
                      <fetcher.Form method='post'>
                         <input type="hidden" name='data_create_order' readOnly value={orderValue} />
-                        <button type='submit' name="_action" value="createOrder" className="btn btn-dark w-100 mt-3">
+                        <button type='submit' name="_action" value="createOrder" className="">
                            Proceed to payment
                         </button>
                      </fetcher.Form>

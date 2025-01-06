@@ -26,21 +26,21 @@ const FormInput: FC<Props> = ({
    errors,
 }) => {
    return (
-      <div className="mb-3">
-         <label htmlFor={htmlFor} className="form-label">
+      <div className="">
+         <label htmlFor={htmlFor} className="">
             {label}
          </label>
          <input
             name={htmlFor}
             type={type}
             id={id}
-            className={classNames('form-control', errors && 'border-danger')}
+            className={classNames('', errors && '')}
             value={value}
             placeholder={`Enter your ${label}`}
             required={required}
             onChange={(e) => onchange(e, id)}
          />
-         {errors && <p className="text-danger fst-italic">{errors}</p>}
+         {errors && <p className="">{errors}</p>}
       </div>
    );
 };
