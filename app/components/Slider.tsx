@@ -30,6 +30,7 @@ const SliderCarousel: FC<Props> = ({
                   src={item}
                   className=""
                   style={{
+                     width: '100%',
                      objectFit: 'cover',
                      height: '472px',
                   }}

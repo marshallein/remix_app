@@ -48,34 +48,36 @@ export default function Index() {
    );
 
    return (
-      <>
-         <SliderCarousel images={bannerImage} />
+      <div className="flex flex-col gap-y-5 p-3">
+         <div className="w-full p-y-10">
+            <SliderCarousel images={bannerImage} />
+         </div>
 
          {/* <!-- Best Seller Product Section --> */}
-         <section className="">
-            <h2 className="">BEST SELLER PRODUCT</h2>
-            <div className="">
+         <section className="flex flex-col gap-y-3">
+            <h2 className="font-thin text-6xl">BEST SELLER PRODUCT</h2>
+            <div className="flex w-full">
                {bestSellerProduct.map((product, idx) => (
                   <div
-                     className=""
+                     className="w-full h-full max-w-[500px] max-h-[650px]"
                      key={idx}
                      id={String(product.id)}
                      tabIndex={0}
-                     onKeyDown={() => { }}
+                     onKeyDown={() => {}}
                      role="button"
                      onClick={handleOnClickProduct}
                   >
-                     <div className="">
+                     <div className="w-full h-full">
                         <img
                            src={product.mainImageString || IMAGE_FALL_BACK_URL}
                            alt="Product 1"
-                           className=""
+                           className="object-contain"
                         />
                      </div>
                      <p>
                         {product.productName}
                         <br />
-                        {product.price.toLocaleString()}$
+                        <span className='font-thin'>{product.price.toLocaleString()}VND</span>
                      </p>
                   </div>
                ))}
@@ -84,9 +86,11 @@ export default function Index() {
 
          {/* <!-- Traditional Collection Section --> */}
          {collectionInfo && (
-            <section className="">
-               <div className="">
-                  <h2>{collectionInfo.collectionName}</h2>
+            <section className="flex flex-col bg-secondary">
+               <div className="flex gap-x-3">
+                  <h2 className="basis-[400px] text-6xl font-thin">
+                     {collectionInfo.collectionName}
+                  </h2>
                   <div className="">
                      <div className="">
                         <img
@@ -105,9 +109,7 @@ export default function Index() {
                         <Link
                            to={`/products?collectionId=${collectionInfo.collectionCode}`}
                         >
-                           <button className="">
-                              SEE THE COLLECTION NOW
-                           </button>
+                           <button className="">SEE THE COLLECTION NOW</button>
                         </Link>
                      </div>
                   </div>
@@ -115,24 +117,27 @@ export default function Index() {
             </section>
          )}
          {collectionInfo && (
-            <section className="">
-               <div className="">
-                  <div className="">
-                     <div className="">
-                        <h2>!NEW COLLECTION!</h2>
-                        <p>{collectionInfo.collectionName}</p>
+            <section className="flex flex-col w-full">
+               <div className="flex w-full justify-between gap-x-3">
+                  <div className="flex gap-x-10 w-full">
+                     <div className="flex flex-col gap-y-5">
+                        <h2 className='text-6xl font-thin'>!NEW COLLECTION!</h2>
+                        <p className='text-4xl font-thin'>{collectionInfo.collectionName}</p>
                         <Link
                            to={`/products?collectionId=${collectionInfo.collectionCode}`}
                         >
-                           <button className="">
-                              BUY NOW
-                           </button>
+                           <button className="bg-primary p-3 rounded">See the collection</button>
                         </Link>
                      </div>
 
-                     <div className="">
+                     <div className="w-full">
                         <div className="">
-                           <SmallSliderCarousel images={collections.map((item) => item.mainImageString)} delay={3000} />
+                           <SmallSliderCarousel
+                              images={collections.map(
+                                 (item) => item.mainImageString,
+                              )}
+                              delay={3000}
+                           />
                         </div>
                      </div>
                   </div>
@@ -152,7 +157,7 @@ export default function Index() {
                         key={idx}
                         id={String(product.id)}
                         tabIndex={0}
-                        onKeyDown={() => { }}
+                        onKeyDown={() => {}}
                         role="button"
                         onClick={handleOnClickProduct}
                      >
@@ -164,17 +169,27 @@ export default function Index() {
                               alt="Product 1"
                               className=""
                            />
-                           {product.salePercent && (<div className="">
-                              {product.salePercent}% OFF
-                           </div>)}
+                           {product.salePercent && (
+                              <div className="">{product.salePercent}% OFF</div>
+                           )}
                         </div>
                         <p style={{ textAlign: 'center', fontSize: '16px' }}>
                            {product.productName}
                            <br />
-                           <span className={classNames(product.salePercent && "")}>{product.price.toLocaleString()}VND</span>
+                           <span
+                              className={classNames(product.salePercent && '')}
+                           >
+                              {product.price.toLocaleString()}VND
+                           </span>
                            <br />
                            {product.salePercent && (
-                              <span className=''>{(product.price - (product.salePercent / 100) * product.price).toLocaleString()}VND</span>
+                              <span className="">
+                                 {(
+                                    product.price -
+                                    (product.salePercent / 100) * product.price
+                                 ).toLocaleString()}
+                                 VND
+                              </span>
                            )}
                         </p>
                      </div>
@@ -252,6 +267,6 @@ export default function Index() {
                </div>
             </div>
          </section>
-      </>
+      </div>
    );
 }
