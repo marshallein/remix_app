@@ -27,37 +27,39 @@ const Pagination: FC<Props> = ({
 
    return (
       <nav
-         className={['', className].filter(Boolean).join(' ')}
+         className={[
+            'flex items-center justify-between gap-3 text-xs uppercase tracking-[0.35em]',
+            className,
+         ]
+            .filter(Boolean)
+            .join(' ')}
          {...attrs}
       >
-         {currentPage <= 1 && (
-            <span className="">
-               <FaAngleLeft />
-               Previous Page
+         {currentPage <= 1 ? (
+            <span className="inline-flex items-center gap-2 rounded border border-alternative_1/30 px-3 py-2 text-alternative_1/60">
+               <FaAngleLeft /> Previous Page
             </span>
-         )}
-         {currentPage > 1 && (
+         ) : (
             <Link
-               className=""
+               className="inline-flex items-center gap-2 rounded border border-alternative_2/40 px-3 py-2 text-alternative_2 transition hover:bg-secondary/30"
                to={`?${previousQuery.toString()}`}
             >
-               <FaAngleLeft />
-               Previous Page
+               <FaAngleLeft /> Previous Page
             </Link>
          )}
-         {currentPage >= totalPages && (
-            <span className="">
-               Next Page
-               <FaAngleRight />
+         <span className="rounded border border-transparent px-3 py-2 text-alternative_2">
+            Page {currentPage} of {totalPages}
+         </span>
+         {currentPage >= totalPages ? (
+            <span className="inline-flex items-center gap-2 rounded border border-alternative_1/30 px-3 py-2 text-alternative_1/60">
+               Next Page <FaAngleRight />
             </span>
-         )}
-         {currentPage < totalPages && (
+         ) : (
             <Link
-               className=""
+               className="inline-flex items-center gap-2 rounded border border-alternative_2/40 px-3 py-2 text-alternative_2 transition hover:bg-secondary/30"
                to={`?${nextQuery.toString()}`}
             >
-               Next Page
-               <FaAngleRight />
+               Next Page <FaAngleRight />
             </Link>
          )}
       </nav>

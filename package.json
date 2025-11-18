@@ -12,6 +12,8 @@
       "prettier": "prettier . --write",
       "postmigrate": "npx @snaplet/seed sync",
       "db:studio": "npx prisma studio",
+      "db:push": "npx prisma db push",
+      "db:generate": "npx prisma generate",
       "seed": "npx tsx prisma/seed/seed.ts"
    },
    "prisma": {
@@ -66,6 +68,6 @@
       "node": ">=20.0.0"
    },
    "@snaplet/seed": {
-      "config": "prisma\\seed\\seed.config.ts"
+      "config": "prisma/seed/seed.config.ts"
    }
 }
