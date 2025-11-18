@@ -1,6 +1,5 @@
 import type { MetaFunction } from '@remix-run/node';
 import { Link, useLoaderData, useNavigate } from '@remix-run/react';
-import classNames from 'classnames';
 import { useCallback } from 'react';
 import SliderCarousel from '~/components/Slider';
 import SmallSliderCarousel from '~/components/SmallSlider';
@@ -77,7 +76,9 @@ export default function Index() {
                      <p>
                         {product.productName}
                         <br />
-                        <span className='font-thin'>{product.price.toLocaleString()}VND</span>
+                        <span className="font-thin">
+                           {product.price.toLocaleString()}VND
+                        </span>
                      </p>
                   </div>
                ))}
@@ -121,12 +122,16 @@ export default function Index() {
                <div className="flex w-full justify-between gap-x-3">
                   <div className="flex gap-x-10 w-full">
                      <div className="flex flex-col gap-y-5">
-                        <h2 className='text-6xl font-thin'>!NEW COLLECTION!</h2>
-                        <p className='text-4xl font-thin'>{collectionInfo.collectionName}</p>
+                        <h2 className="text-6xl font-thin">!NEW COLLECTION!</h2>
+                        <p className="text-4xl font-thin">
+                           {collectionInfo.collectionName}
+                        </p>
                         <Link
                            to={`/products?collectionId=${collectionInfo.collectionCode}`}
                         >
-                           <button className="bg-primary p-3 rounded">See the collection</button>
+                           <button className="bg-primary p-3 rounded">
+                              See the collection
+                           </button>
                         </Link>
                      </div>
 
@@ -146,14 +151,13 @@ export default function Index() {
          )}
 
          {/* <!-- On Sales Section --> */}
-         <section className="">
-            <div className="">
-               <h2 className="">ON SALES</h2>
-               <h4 className="">Hottest sale of the year!</h4>
-               <div className="">
+         <section className="on-sales my-5">
+            <div className="container">
+               <h2 className="on-sales-title">ON SALES</h2>
+               <div className="row container mt-4 align-items-center">
                   {onSaleProduct.map((product, idx) => (
                      <div
-                        className=""
+                        className="col-md-3"
                         key={idx}
                         id={String(product.id)}
                         tabIndex={0}
@@ -161,36 +165,19 @@ export default function Index() {
                         role="button"
                         onClick={handleOnClickProduct}
                      >
-                        <div className="">
+                        <div className="product-card">
                            <img
                               src={
                                  product.mainImageString || IMAGE_FALL_BACK_URL
                               }
                               alt="Product 1"
-                              className=""
+                              className="img-fluid"
                            />
-                           {product.salePercent && (
-                              <div className="">{product.salePercent}% OFF</div>
-                           )}
                         </div>
                         <p style={{ textAlign: 'center', fontSize: '16px' }}>
                            {product.productName}
                            <br />
-                           <span
-                              className={classNames(product.salePercent && '')}
-                           >
-                              {product.price.toLocaleString()}VND
-                           </span>
-                           <br />
-                           {product.salePercent && (
-                              <span className="">
-                                 {(
-                                    product.price -
-                                    (product.salePercent / 100) * product.price
-                                 ).toLocaleString()}
-                                 VND
-                              </span>
-                           )}
+                           {product.price.toLocaleString()}$
                         </p>
                      </div>
                   ))}
@@ -198,23 +185,23 @@ export default function Index() {
             </div>
          </section>
 
-         <section className="">
-            <div className="">
-               <h2 className="">FEEDBACK</h2>
+         <section className="feedback my-5">
+            <div className="container">
+               <h2 className="feedback-title">FEEDBACK</h2>
 
-               <div className="">
-                  <div className="">
-                     <div className="">
-                        <div className="">
+               <div className="row text-center mt-4">
+                  <div className="col-md-4">
+                     <div className="feedback-card">
+                        <div className="circle">
                            <img
-                              className=""
+                              className="img-thumbnail"
                               src="https://api.dicebear.com/9.x/lorelei/svg"
                               alt="avAtar"
                            />
                         </div>
-                        <p className="">Naima Merlyn</p>
-                        <p className="">Hawaiian</p>
-                        <p className="">
+                        <p className="customer-name">Naima Merlyn</p>
+                        <p className="customer-country">Hawaiian</p>
+                        <p className="customer-feedback">
                            Absolutely loved my new áo dài! The fabric feels
                            luxurious, and the embroidery is stunning. It fits
                            perfectly and made me feel so elegant at my
@@ -224,18 +211,18 @@ export default function Index() {
                      </div>
                   </div>
 
-                  <div className="">
-                     <div className="">
-                        <div className="">
+                  <div className="col-md-4">
+                     <div className="feedback-card">
+                        <div className="circle">
                            <img
-                              className=""
+                              className="img-thumbnail"
                               src="https://api.dicebear.com/9.x/lorelei/svg"
                               alt="avAtar"
                            />
                         </div>
-                        <p className="">Bethsabée Saldís</p>
-                        <p className="">Greek</p>
-                        <p className="">
+                        <p className="customer-name">Bethsabée Saldís</p>
+                        <p className="customer-country">Greek</p>
+                        <p className="customer-feedback">
                            The áo dài I bought is beautiful, but the size runs a
                            little smaller than expected. Thankfully, the staff
                            was very helpful with the exchange process. Overall,
@@ -244,18 +231,18 @@ export default function Index() {
                      </div>
                   </div>
 
-                  <div className="">
-                     <div className="">
-                        <div className="">
+                  <div className="col-md-4">
+                     <div className="feedback-card">
+                        <div className="circle">
                            <img
-                              className=""
+                              className="img-thumbnail"
                               src="https://api.dicebear.com/9.x/lorelei/svg"
                               alt="avAtar"
                            />
                         </div>
-                        <p className="">Viona Myrthe</p>
-                        <p className="">German</p>
-                        <p className="">
+                        <p className="customer-name">Viona Myrthe</p>
+                        <p className="customer-country">German</p>
+                        <p className="customer-feedback">
                            I couldn&apos;t be happier with my purchase! The
                            color and pattern of the áo dài exceeded my
                            expectations, and it arrived in perfect condition.

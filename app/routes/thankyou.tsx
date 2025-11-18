@@ -16,8 +16,8 @@ export default function ThankYouPage() {
 
    return (
       <main>
-         <div className="">
-            <div className="">✔</div>
+         <div className="thank-you-container">
+            <div className="checkmark">✔</div>
             <h1>Thank you!</h1>
             <p>
                Your Order have been created, More information will be announced
@@ -26,7 +26,7 @@ export default function ThankYouPage() {
                Thank you {`${data.user.name}`} for your order. We will contact
                you soon.
             </p>
-            <Link className="" to={'/'}>
+            <Link className="btn" to={'/'}>
                Back to Home
             </Link>
          </div>

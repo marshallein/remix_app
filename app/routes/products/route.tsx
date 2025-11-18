@@ -31,15 +31,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
    const sort = url.searchParams.get('sort') || '';
    const page = url.searchParams.get('page') || '';
    const collectionId = url.searchParams.get('collectionId') || '';
-   const searchString = url.searchParams.get("search") || ""
+   const searchString = url.searchParams.get('search') || '';
 
    const currentPage = Math.max(Number(page || 1), 1);
 
    const option = {
       orderBy: sort
          ? {
-            price: sort as Prisma.SortOrder,
-         }
+              price: sort as Prisma.SortOrder,
+           }
          : undefined,
    };
 
@@ -52,7 +52,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       where: {
          productName: {
             contains: searchString ? searchString : undefined,
-            mode: "insensitive"
+            mode: 'insensitive',
          },
          tags: tag ? (tag as Tags) : undefined,
          Collection: {
@@ -67,14 +67,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       where: {
          productName: {
             contains: searchString ? searchString : undefined,
-            mode: "insensitive"
+            mode: 'insensitive',
          },
          tags: tag ? (tag as Tags) : undefined,
          Collection: {
             collectionCode: collectionId ? collectionId : undefined,
          },
       },
-      ...option
+      ...option,
    });
    return { products, count };
 };
@@ -117,19 +117,20 @@ export default function ProductsPage() {
       [navigate, queryParams],
    );
 
-   const handleChangeSearch = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-      const target = event.currentTarget;
-      setSearch(target.value);
-   }, [])
+   const handleChangeSearch = useCallback(
+      (event: React.ChangeEvent<HTMLInputElement>) => {
+         const target = event.currentTarget;
+         setSearch(target.value);
+      },
+      [],
+   );
 
    const onClickSearchButton = useCallback(() => {
-
       const previousQuery = new URLSearchParams(queryParams);
       if (previousQuery.has('search')) previousQuery.delete('search');
       search && previousQuery.append('search', search);
       navigate(`?${previousQuery.toString()}`);
-
-   }, [navigate, queryParams, search])
+   }, [navigate, queryParams, search]);
 
    const totalPages = Math.ceil(count / PRODUCTS_PER_PAGE);
 
@@ -187,8 +188,9 @@ export default function ProductsPage() {
                   </li>
                </ul>
 
-               <h5>Price</h5>
-               <ul className="">
+               {/* TODO: implement price rang sort */}
+               {/* <h5>Price</h5>
+               <ul className="list-unstyled">
                   <li>
                      <input type="checkbox" /> Under 100,000
                   </li>
@@ -201,7 +203,7 @@ export default function ProductsPage() {
                   <li>
                      <input type="checkbox" /> Above 500,000
                   </li>
-               </ul>
+               </ul> */}
 
                {/* TODO: implement this later */}
                {/* <h5>Size</h5>
@@ -211,9 +213,27 @@ export default function ProductsPage() {
             <div className="">
                <div className="">
                   <h3>Product Listing</h3>
-                  <div className="">
-                     <input type="text" name='searchBar' className="" value={search} onChange={(e) => { handleChangeSearch(e) }} placeholder="Search" aria-label="Recipient's username" aria-describedby="button-addon2" />
-                     <button className="" type="button" id="button-addon2" onClick={onClickSearchButton}>Search</button>
+                  <div className="input-group">
+                     <input
+                        type="text"
+                        name="searchBar"
+                        className="form-control"
+                        value={search}
+                        onChange={(e) => {
+                           handleChangeSearch(e);
+                        }}
+                        placeholder="Search"
+                        aria-label="Recipient's username"
+                        aria-describedby="button-addon2"
+                     />
+                     <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        id="button-addon2"
+                        onClick={onClickSearchButton}
+                     >
+                        Search
+                     </button>
                   </div>
                   <div className="">
                      <button
@@ -225,10 +245,7 @@ export default function ProductsPage() {
                      >
                         Sort
                      </button>
-                     <ul
-                        className=""
-                        aria-labelledby="sortDropdown"
-                     >
+                     <ul className="" aria-labelledby="sortDropdown">
                         <li>
                            <button
                               className=""
@@ -261,7 +278,10 @@ export default function ProductsPage() {
                   {products.map((item, idx) => (
                      <div className="" key={idx}>
                         <div className="">
-                           <Link className='no-underline' to={`/product/${item.id}`}>
+                           <Link
+                              className="no-underline"
+                              to={`/product/${item.id}`}
+                           >
                               <div className="">
                                  <div
                                     className=""
@@ -279,11 +299,7 @@ export default function ProductsPage() {
                                     />
                                  </div>
                                  <h5 className="">
-                                    <p
-                                       className=""
-                                    >
-                                       {item.productName}
-                                    </p>
+                                    <p className="">{item.productName}</p>
                                  </h5>
                                  <p className="">
                                     <Link
@@ -296,17 +312,12 @@ export default function ProductsPage() {
                                        {item.salePercent}% OFF
                                     </div>
                                  )}
-                                 <div className="">
-                                    <a href="shoppingcart.html">
-                                       <button className="">
-                                          Add to Cart
+                                 <div className="d-flex justify-content-center mt-3">
+                                    <Link to={`/product/${item.id}`}>
+                                       <button className="btn btn-danger me-2">
+                                          See the product
                                        </button>
-                                    </a>
-                                    <a href="checkout.html">
-                                       <button className="">
-                                          Buy Now
-                                       </button>
-                                    </a>
+                                    </Link>
                                  </div>
                               </div>
                            </Link>
