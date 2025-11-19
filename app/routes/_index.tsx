@@ -1,11 +1,11 @@
 import type { MetaFunction } from '@remix-run/node';
 import { Link, useLoaderData, useNavigate } from '@remix-run/react';
-import classNames from 'classnames';
 import { useCallback } from 'react';
 import SliderCarousel from '~/components/Slider';
 import SmallSliderCarousel from '~/components/SmallSlider';
 import { IMAGE_FALL_BACK_URL } from '~/modules/domain';
 import { getCollectionInfo } from '~/modules/server/collection.server';
+import { getAllFeedbacks } from '~/modules/server/feedback.server';
 import {
    getProductsByCollection,
    getProductsByPromotion,
@@ -24,18 +24,31 @@ const bannerImage: string[] = [
 
 export const loader = async () => {
    const collectionInfo = await getCollectionInfo('AY2024');
-   const [bestSellerProduct, onSaleProduct, collections] = await Promise.all([
-      getProductsByPromotion('Best_Seller'),
-      getProductsByPromotion('Sale'),
-      getProductsByCollection(collectionInfo?.collectionCode || ''),
-   ]);
+   const [bestSellerProduct, onSaleProduct, collections, feedbacks] =
+      await Promise.all([
+         getProductsByPromotion('Best_Seller'),
+         getProductsByPromotion('Sale'),
+         getProductsByCollection(collectionInfo?.collectionCode || ''),
+         getAllFeedbacks(),
+      ]);
 
-   return { bestSellerProduct, onSaleProduct, collections, collectionInfo };
+   return {
+      bestSellerProduct,
+      onSaleProduct,
+      collections,
+      collectionInfo,
+      feedbacks,
+   };
 };
 
 export default function Index() {
-   const { bestSellerProduct, onSaleProduct, collections, collectionInfo } =
-      useLoaderData<typeof loader>();
+   const {
+      bestSellerProduct,
+      onSaleProduct,
+      collections,
+      collectionInfo,
+      feedbacks,
+   } = useLoaderData<typeof loader>();
    const navigate = useNavigate();
 
    const handleOnClickProduct = useCallback(
@@ -48,35 +61,55 @@ export default function Index() {
    );
 
    return (
-      <>
-         <SliderCarousel images={bannerImage} />
+      <div className="min-h-screen bg-slate-50 px-4 py-10 sm:px-6 lg:px-12 space-y-12">
+         <div className="w-full rounded border border-white/50 bg-white/70 p-4 shadow-xl shadow-[0_25px_70px_rgba(0,0,0,0.07)] backdrop-blur">
+            <SliderCarousel images={bannerImage} />
+         </div>
 
          {/* <!-- Best Seller Product Section --> */}
-         <section className="container my-5">
-            <h2 className="text-center">BEST SELLER PRODUCT</h2>
-            <div className="row text-center">
+         <section className="space-y-6">
+            <div className="flex items-end justify-between">
+               <div>
+                  <p className="text-xs uppercase tracking-[0.4em] text-alternative_1">
+                     Featured
+                  </p>
+                  <h2 className="text-4xl font-light text-alternative_2">
+                     Best Seller Product
+                  </h2>
+               </div>
+               <Link
+                  to="/products?promotion=Best_Seller"
+                  className="rounded border border-alternative_2/20 px-4 py-2 text-sm font-semibold text-alternative_2 transition hover:bg-alternative_2 hover:text-primary"
+               >
+                  View all
+               </Link>
+            </div>
+            <div className="grid gap-6 md:grid-cols-3">
                {bestSellerProduct.map((product, idx) => (
                   <div
-                     className="col-md-3 product-card-best-seller"
+                     className="group flex flex-col overflow-hidden rounded border border-white/50 bg-white/90 shadow-2xl shadow-secondary/30 transition hover:-translate-y-1 hover:bg-white"
                      key={idx}
                      id={String(product.id)}
                      tabIndex={0}
-                     onKeyDown={() => { }}
+                     onKeyDown={() => {}}
                      role="button"
                      onClick={handleOnClickProduct}
                   >
-                     <div className="product-card">
+                     <div className="w-full h-[320px] bg-secondary/20">
                         <img
                            src={product.mainImageString || IMAGE_FALL_BACK_URL}
                            alt="Product 1"
-                           className="img-fluid"
+                           className="h-full w-full object-cover"
                         />
                      </div>
-                     <p>
-                        {product.productName}
-                        <br />
-                        {product.price.toLocaleString()}$
-                     </p>
+                     <div className="px-6 py-5 space-y-2">
+                        <p className="text-lg font-semibold text-alternative_2">
+                           {product.productName}
+                        </p>
+                        <span className="text-sm uppercase tracking-[0.3em] text-alternative_1">
+                           {product.price.toLocaleString()} VND
+                        </span>
+                     </div>
                   </div>
                ))}
             </div>
@@ -84,174 +117,151 @@ export default function Index() {
 
          {/* <!-- Traditional Collection Section --> */}
          {collectionInfo && (
-            <section className="collection-section my-5">
-               <div className="container">
-                  <h2>{collectionInfo.collectionName}</h2>
-                  <div className="row align-items-center">
-                     <div className="col-md-8">
+            <section className="rounded bg-alternative_2 text-primary shadow-2xl shadow-alternative_2/30">
+               <div className="grid gap-6 p-8 md:grid-cols-[1fr,1.2fr] md:items-center">
+                  <div className="space-y-4">
+                     <p className="text-xs uppercase tracking-[0.4em] text-secondary">
+                        Signature drop
+                     </p>
+                     <h2 className="text-4xl font-light">
+                        {collectionInfo.collectionName}
+                     </h2>
+                     <p className="text-primary/80 leading-relaxed">
+                        {collectionInfo.description}
+                     </p>
+                     <Link
+                        to={`/products?collectionId=${collectionInfo.collectionCode}`}
+                     >
+                        <button className="rounded bg-secondary px-6 py-3 text-sm font-semibold text-alternative_2 transition hover:bg-primary">
+                           See the collection now
+                        </button>
+                     </Link>
+                  </div>
+                  <div className="grid gap-4 md:grid-cols-2">
+                     <div className="h-[280px] overflow-hidden rounded">
                         <img
                            src="/poster.jpg"
                            alt="Traditional Collection 1"
-                           className="img-fluid mb-3"
-                        />
-                        <img
-                           src="/poster.jpg"
-                           alt="Traditional Collection 2"
-                           className="img-fluid"
+                           className="h-full w-full object-cover"
                         />
                      </div>
-                     <div className="col-md-4">
-                        <p>{collectionInfo.description}</p>
-                        <Link
-                           to={`/products?collectionId=${collectionInfo.collectionCode}`}
-                        >
-                           <button className="btn btn-dark mb-4">
-                              SEE THE COLLECTION NOW
-                           </button>
-                        </Link>
+                     <div className="h-[280px] overflow-hidden rounded">
+                        <img
+                           src="/poster1.jpg"
+                           alt="Traditional Collection 2"
+                           className="h-full w-full object-cover"
+                        />
                      </div>
                   </div>
                </div>
             </section>
          )}
          {collectionInfo && (
-            <section className="new-collection my-5 text-center">
-               <div className="container">
-                  <div className="row align-items-center">
-                     <div className="col-md-6 text-left">
-                        <h2>!NEW COLLECTION!</h2>
-                        <p>{collectionInfo.collectionName}</p>
-                        <Link
-                           to={`/products?collectionId=${collectionInfo.collectionCode}`}
-                        >
-                           <button className="btn btn-dark mb-4">
-                              BUY NOW
-                           </button>
-                        </Link>
+            <section className="rounded border border-alternative_1/20 bg-white/80 p-6 shadow-[0_25px_70px_rgba(0,0,0,0.07)]">
+               <div className="flex flex-col justify-between gap-10 lg:flex-row lg:items-center">
+                  <div className="flex flex-col gap-10 space-y-4 lg:basis-2/5">
+                     <div>
+                        <p className="text-xs uppercase tracking-[0.45em] text-secondary">
+                           New collection
+                        </p>
+                        <h2 className="text-4xl font-light text-alternative_2">
+                           {collectionInfo.collectionName}
+                        </h2>
                      </div>
-
-                     <div className="col-md-6">
-                        <div className="row">
-                           <SmallSliderCarousel images={collections.map((item) => item.mainImageString)} delay={3000} />
-                        </div>
-                     </div>
+                     <p className="text-alternative_1">
+                        Discover fresh silhouettes curated for this season.
+                        Swipe through highlight pieces below.
+                     </p>
+                     <Link
+                        to={`/products?collectionId=${collectionInfo.collectionCode}`}
+                     >
+                        <button className="rounded bg-alternative_2 px-6 py-3 text-sm font-semibold text-primary shadow-lg shadow-alternative_2/40 transition hover:-translate-y-0.5 hover:bg-alternative_2/90">
+                           See the collection
+                        </button>
+                     </Link>
+                  </div>
+                  <div className="rounded border border-secondary/40 bg-secondary/70 p-4">
+                     <SmallSliderCarousel
+                        images={collections.map((item) => item.mainImageString)}
+                        delay={3000}
+                     />
                   </div>
                </div>
             </section>
          )}
 
          {/* <!-- On Sales Section --> */}
-         <section className="on-sales my-5">
-            <div className="container">
-               <h2 className="on-sales-title">ON SALES</h2>
-               <h4 className='on-sales-subtitle'>Hottest sale of the year!</h4>
-               <div className="row container mt-4 align-items-center">
-                  {onSaleProduct.map((product, idx) => (
-                     <div
-                        className="col-md-3"
-                        key={idx}
-                        id={String(product.id)}
-                        tabIndex={0}
-                        onKeyDown={() => { }}
-                        role="button"
-                        onClick={handleOnClickProduct}
-                     >
-                        <div className="product-card">
-                           <img
-                              src={
-                                 product.mainImageString || IMAGE_FALL_BACK_URL
-                              }
-                              alt="Product 1"
-                              className="img-fluid"
-                           />
-                           {product.salePercent && (<div className="sale-badge">
-                              {product.salePercent}% OFF
-                           </div>)}
-                        </div>
-                        <p style={{ textAlign: 'center', fontSize: '16px' }}>
-                           {product.productName}
-                           <br />
-                           <span className={classNames(product.salePercent && "product-card-text")}>{product.price.toLocaleString()}VND</span>
-                           <br />
-                           {product.salePercent && (
-                              <span className='product-card-text-sale'>{(product.price - (product.salePercent / 100) * product.price).toLocaleString()}VND</span>
-                           )}
-                        </p>
+         <section className="space-y-6 rounded border border-alternative_1/20 bg-white/90 p-8shadow-[0_25px_70px_rgba(0,0,0,0.07)]">
+            <div className="flex flex-col gap-2 text-center">
+               <p className="text-xs uppercase tracking-[0.5em] text-secondary">
+                  Limited time
+               </p>
+               <h2 className="text-4xl font-light text-alternative_2">
+                  On Sales
+               </h2>
+            </div>
+            <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-4">
+               {onSaleProduct.map((product, idx) => (
+                  <div
+                     className="flex flex-col rounded border border-secondary/20 bg-gradient-to-br from-primary/70 to-white/90 p-4 text-center shadow-lg shadow-secondary/30 transition hover:-translate-y-1"
+                     key={idx}
+                     id={String(product.id)}
+                     tabIndex={0}
+                     onKeyDown={() => {}}
+                     role="button"
+                     onClick={handleOnClickProduct}
+                  >
+                     <div className="h-56 overflow-hidden rounded bg-white">
+                        <img
+                           src={product.mainImageString || IMAGE_FALL_BACK_URL}
+                           alt="Product 1"
+                           className="h-full w-full object-cover"
+                        />
                      </div>
-                  ))}
-               </div>
+                     <p className="mt-4 text-sm font-semibold text-alternative_2">
+                        {product.productName}
+                     </p>
+                     <span className="text-xs uppercase tracking-[0.35em] text-alternative_1">
+                        {product.price.toLocaleString()} VND
+                     </span>
+                  </div>
+               ))}
             </div>
          </section>
 
-         <section className="feedback my-5">
-            <div className="container">
-               <h2 className="feedback-title">FEEDBACK</h2>
-
-               <div className="row text-center mt-4">
-                  <div className="col-md-4">
-                     <div className="feedback-card">
-                        <div className="circle">
-                           <img
-                              className="img-thumbnail"
-                              src="https://api.dicebear.com/9.x/lorelei/svg"
-                              alt="avAtar"
-                           />
-                        </div>
-                        <p className="customer-name">Naima Merlyn</p>
-                        <p className="customer-country">Hawaiian</p>
-                        <p className="customer-feedback">
-                           Absolutely loved my new áo dài! The fabric feels
-                           luxurious, and the embroidery is stunning. It fits
-                           perfectly and made me feel so elegant at my
-                           sister&apos;s wedding. Highly recommend this store
-                           for their attention to detail and quality!
-                        </p>
+         <section className="rounded border border-white/60 bg-white/90 p-8 shadow-2xl shadow-secondary/30">
+            <div className="text-center space-y-3">
+               <p className="text-xs uppercase tracking-[0.4em] text-secondary">
+                  Feedback
+               </p>
+               <h2 className="text-4xl font-light text-alternative_2">
+                  Stories from the community
+               </h2>
+            </div>
+            <div className="mt-8 grid gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+               {feedbacks.map((item, index) => (
+                  <div
+                     key={index}
+                     id="feedback_cards"
+                     className="flex flex-col items-center rounded border border-primary/40 bg-gradient-to-b from-primary/70 to-white/90 px-6 py-8 text-center shadow-lg transition hover:-translate-y-1 hover:shadow-2xl"
+                  >
+                     <div className="mb-4 h-24 w-24 overflow-hidden rounded-full border-4 border-white shadow-lg">
+                        <img
+                           className="h-full w-full object-cover"
+                           src={item.avatarUrl}
+                           alt="avatar"
+                        />
                      </div>
+                     <p className="text-lg font-semibold text-alternative_2">
+                        {item.customer}
+                     </p>
+                     <p className="mt-4 text-sm text-alternative_1">
+                        {item.comment}
+                     </p>
                   </div>
-
-                  <div className="col-md-4">
-                     <div className="feedback-card">
-                        <div className="circle">
-                           <img
-                              className="img-thumbnail"
-                              src="https://api.dicebear.com/9.x/lorelei/svg"
-                              alt="avAtar"
-                           />
-                        </div>
-                        <p className="customer-name">Bethsabée Saldís</p>
-                        <p className="customer-country">Greek</p>
-                        <p className="customer-feedback">
-                           The áo dài I bought is beautiful, but the size runs a
-                           little smaller than expected. Thankfully, the staff
-                           was very helpful with the exchange process. Overall,
-                           happy with the design and service.
-                        </p>
-                     </div>
-                  </div>
-
-                  <div className="col-md-4">
-                     <div className="feedback-card">
-                        <div className="circle">
-                           <img
-                              className="img-thumbnail"
-                              src="https://api.dicebear.com/9.x/lorelei/svg"
-                              alt="avAtar"
-                           />
-                        </div>
-                        <p className="customer-name">Viona Myrthe</p>
-                        <p className="customer-country">German</p>
-                        <p className="customer-feedback">
-                           I couldn&apos;t be happier with my purchase! The
-                           color and pattern of the áo dài exceeded my
-                           expectations, and it arrived in perfect condition.
-                           It&apos;s clear they care about their customers and
-                           their products. Will definitely shop here again!
-                        </p>
-                     </div>
-                  </div>
-               </div>
+               ))}
             </div>
          </section>
-      </>
+      </div>
    );
 }

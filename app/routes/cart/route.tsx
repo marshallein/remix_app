@@ -15,7 +15,7 @@ import {
 import { FaHouse } from 'react-icons/fa6';
 import { FaTrash } from 'react-icons/fa';
 import { IMAGE_FALL_BACK_URL } from '~/modules/domain';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { createOrder, OrderPayLoad } from '~/modules/server/order.server';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -62,12 +62,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
          await removeFromCart(String(user?.id), String(productId));
          break;
       }
-      case "createOrder": {
-         const dataOrder = data.get("data_create_order") || "";
+      case 'createOrder': {
+         const dataOrder = data.get('data_create_order') || '';
          const payload = JSON.parse(dataOrder as string) as OrderPayLoad;
          await createOrder(payload);
 
-         return redirect("/thankyou");
+         return redirect('/thankyou');
       }
       default: {
          throw new Response('Bad Request', { status: 400 });
@@ -81,16 +81,17 @@ export default function CartPage() {
    const data = useLoaderData<typeof loader>();
    const fetcher = useFetcher();
 
-
    const totalPrice = useMemo(() => {
       if (!data.cart) return 0;
 
-      return data.cart?.CartItems.reduce((sum, current) => sum + current.product.price, 0);
-   }, [data])
+      return data.cart?.CartItems.reduce(
+         (sum, current) => sum + current.product.price * current.quantity,
+         0,
+      );
+   }, [data]);
 
    const orderValue = useMemo<string>(() => {
-
-      const { cart } = data
+      const { cart } = data;
 
       if (cart) {
          return JSON.stringify({
@@ -101,165 +102,191 @@ export default function CartPage() {
                return {
                   productId: item.productId,
                   quantity: item.quantity,
-                  price: item.product.price
-               }
-            })
-         })
+                  price: item.product.price,
+               };
+            }),
+         });
       } else {
-         return JSON.stringify("");
+         return JSON.stringify('');
       }
-
-   }, [data, totalPrice])
+   }, [data, totalPrice]);
 
    return (
-      <div className="container">
-         <div className="breadcrumb">
-            <li className="breadcrumb-item">
-               <a href="home.html">
-                  <FaHouse />
+      <section className="min-h-screen bg-white">
+         <div className="mx-auto max-w-5xl space-y-10 px-4 py-12 sm:px-6 lg:px-0">
+            <div className="flex items-center gap-3 text-sm text-alternative_1">
+               <FaHouse />
+               <Link to="/" className="uppercase tracking-[0.35em]">
                   Home
-               </a>
-            </li>
-            <li className="breadcrumb-item active" aria-current="page">
-               Shopping cart
-            </li>
-         </div>
-
-         <div className="cart-container row">
-            <div className="col-md-8">
-               {data.cart?.CartItems.map((item) => (
-                  <div
-                     className="cart-item d-flex align-items-center"
-                     key={item.id}
-                  >
-                     <div className="product-image me-3">
-                        <img
-                           src={
-                              item.product.mainImageString ||
-                              IMAGE_FALL_BACK_URL
-                           }
-                           alt="Product"
-                           style={{
-                              width: '80px',
-                              height: '100px',
-                              border: '1px solid #ddd',
-                              objectFit: "contain"
-                           }}
-                        />
-                     </div>
-                     <div>
-                        <p>
-                           <strong>{item.product.tags}</strong>
-                           <br />
-                           {item.product.sku}
-                           <br />
-                           {item.product.productName}
-                        </p>
-                     </div>
-                     <div className="ms-auto text-end d-flex flex-column">
-                        <div className="d-flex align-items-center justify-content-end">
-                           <fetcher.Form method="post">
-                              <input
-                                 type="hidden"
-                                 name="productId"
-                                 value={item.productId}
-                                 readOnly
-                              />
-                              <button
-                                 type="submit"
-                                 name="_action"
-                                 value="decrease"
-                                 className="btn btn-light btn-sm"
-                              >
-                                 -
-                              </button>
-                           </fetcher.Form>
-                           <input
-                              type="text"
-                              className="form-control text-center mx-2"
-                              value={item.quantity}
-                              readOnly
-                              style={{ width: '50px' }}
-                           />
-                           <fetcher.Form method="post">
-                              <input
-                                 type="hidden"
-                                 name="productId"
-                                 value={item.productId}
-                                 readOnly
-                              />
-                              <button
-                                 type="submit"
-                                 name="_action"
-                                 value="increase"
-                                 className="btn btn-light btn-sm"
-                              >
-                                 +
-                              </button>
-                           </fetcher.Form>
-                        </div>
-                        <p className="mt-2">
-                           {(
-                              item.product.price * item.quantity
-                           ).toLocaleString()}
-                           VND
-                        </p>
-                        <fetcher.Form method="post">
-                           <input
-                              type="hidden"
-                              readOnly
-                              name="productId"
-                              value={item.productId}
-                           />
-                           <button
-                              type="submit"
-                              name="_action"
-                              value="removeFromCart"
-                              className="btn"
-                           >
-                              <FaTrash /> Remove from cart
-                           </button>
-                        </fetcher.Form>
-                     </div>
-                  </div>
-               ))}
-
-               <Link to="/products" className="btn btn-outline-dark mt-3">
-                  Continue viewing more products
                </Link>
+               <span className="text-alternative_1/60">/</span>
+               <span className="uppercase tracking-[0.35em] text-alternative_2">
+                  Shopping cart
+               </span>
             </div>
 
-            <div className="col-md-4">
-               {/* <div className="coupon-code mb-4">
-                  <h5>COUPON CODE</h5>
-                  <p>Please enter coupon code to receive 30% discount</p>
-                  <input
-                     type="text"
-                     className="form-control"
-                     placeholder="Coupon Code"
-                  />
-                  <button className="btn btn-dark w-100 mt-2">Apply</button>
-               </div> */}
+            <div className="grid gap-8 lg:grid-cols-[1.2fr,0.8fr]">
+               <div className="rounded border border-white/60 bg-white/85 p-6 shadow-2xl shadow-primary/20 space-y-6">
+                  <div className="flex items-center justify-between">
+                     <div>
+                        <p className="text-xs uppercase tracking-[0.45em] text-secondary">
+                           Items
+                        </p>
+                        <h2 className="text-3xl font-light text-alternative_2">
+                           Your cart
+                        </h2>
+                     </div>
+                     <Link
+                        to="/products"
+                        className="rounded border border-alternative_2/40 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-alternative_2 transition hover:bg-secondary/30"
+                     >
+                        Continue shopping
+                     </Link>
+                  </div>
+                  <div className="space-y-4">
+                     {data.cart?.CartItems && data.cart.CartItems.length > 0 ? (
+                        data.cart.CartItems.map((item, index) => (
+                           <React.Fragment key={`${item.id}-${index}`}>
+                              <div className="flex flex-col gap-4 rounded border border-alternative_1/20 p-4 shadow-sm shadow-secondary/20 sm:flex-row sm:items-center">
+                                 <div className="flex items-center gap-4">
+                                    <img
+                                       src={
+                                          item.product.mainImageString ||
+                                          IMAGE_FALL_BACK_URL
+                                       }
+                                       alt="Product"
+                                       className="h-28 w-24 rounded border border-alternative_1/20 object-cover"
+                                    />
+                                 </div>
 
-               <div className="cart-summary">
-                  <h5>Cart Total</h5>
-                  <p>
-                     Cart Subtotal:{' '}
-                     <span className="float-end">{totalPrice?.toLocaleString()}VND</span>
+                                 <div>
+                                    <p className="text-xs uppercase tracking-[0.35em] text-secondary">
+                                       {item.product.tags}
+                                    </p>
+                                    <p className="text-sm text-alternative_1">
+                                       SKU: {item.product.sku}
+                                    </p>
+                                    <p className="text-lg font-semibold text-alternative_2">
+                                       {item.product.productName}
+                                    </p>
+                                 </div>
+                              </div>
+                              <div className="flex flex-wrap gap-3">
+                                 <div className="inline-flex items-center rounded border border-secondary/40 bg-white/70 px-2 py-2 shadow-inner">
+                                    <fetcher.Form method="post">
+                                       <input
+                                          type="hidden"
+                                          name="productId"
+                                          value={item.productId}
+                                          readOnly
+                                       />
+                                       <button
+                                          type="submit"
+                                          name="_action"
+                                          value="decrease"
+                                          className="h-8 w-8 rounded text-lg text-alternative_2 transition hover:bg-secondary/30"
+                                       >
+                                          -
+                                       </button>
+                                    </fetcher.Form>
+                                    <input
+                                       type="text"
+                                       className="w-12 bg-transparent text-center text-sm font-semibold text-alternative_2"
+                                       value={item.quantity}
+                                       readOnly
+                                    />
+                                    <fetcher.Form method="post">
+                                       <input
+                                          type="hidden"
+                                          name="productId"
+                                          value={item.productId}
+                                          readOnly
+                                       />
+                                       <button
+                                          type="submit"
+                                          name="_action"
+                                          value="increase"
+                                          className="h-8 w-8 rounded text-lg text-alternative_2 transition hover:bg-secondary/30"
+                                       >
+                                          +
+                                       </button>
+                                    </fetcher.Form>
+                                 </div>
+                                 <p className="text-sm text-alternative_2">
+                                    {(item.product.price * item.quantity).toLocaleString()} VND
+                                 </p>
+                              </div>
+                              <fetcher.Form method="post">
+                                 <input
+                                    type="hidden"
+                                    readOnly
+                                    name="productId"
+                                    value={item.productId}
+                                 />
+                                 <button
+                                    type="submit"
+                                    name="_action"
+                                    value="removeFromCart"
+                                    className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-rose-500 transition hover:text-rose-700"
+                                 >
+                                    <FaTrash /> Remove
+                                 </button>
+                              </fetcher.Form>
+                           </React.Fragment>
+                        ))
+                     ) : (
+                        <div className="rounded border border-dashed border-alternative_1/30 bg-white/70 px-6 py-8 text-center text-sm text-alternative_1">
+                           Your cart is empty. Add a product to begin checkout.
+                        </div>
+                     )}
+                  </div>
+               </div>
+
+               <div className="rounded border border-white/60 bg-white/85 p-6 shadow-2xl shadow-primary/20 space-y-4">
+                  <h5 className="text-xl font-semibold text-alternative_2">
+                     Cart total
+                  </h5>
+                  <p className="text-sm text-alternative_1">
+                     Cart subtotal:{' '}
+                     <span className="font-semibold text-alternative_2">
+                        {totalPrice?.toLocaleString()} VND
+                     </span>
                   </p>
-                  <p>
-                     Discount: <span className="float-end">100.000 VND</span>
+                  <p className="text-sm text-alternative_1">
+                     Discount:{' '}
+                     <span className="font-semibold text-alternative_2">
+                        100,000 VND
+                     </span>
                   </p>
-                  <p>
-                     Shipping: <span className="float-end">FREE</span>
+                  <p className="text-sm text-alternative_1">
+                     Shipping:{' '}
+                     <span className="font-semibold text-alternative_2">
+                        FREE
+                     </span>
                   </p>
-                  <h5>
-                     Total: <span className="float-end">{(totalPrice && (totalPrice - 100000).toLocaleString())}VND</span>
+                  <h5 className="text-lg font-semibold text-alternative_2">
+                     Total:{' '}
+                     <span>
+                        {totalPrice
+                           ? (totalPrice - 100000).toLocaleString()
+                           : 0}
+                        VND
+                     </span>
                   </h5>
                   {data.cart && data.cart?.CartItems.length > 0 && (
-                     <fetcher.Form method='post'>
-                        <input type="hidden" name='data_create_order' readOnly value={orderValue} />
-                        <button type='submit' name="_action" value="createOrder" className="btn btn-dark w-100 mt-3">
+                     <fetcher.Form method="post" className="pt-2">
+                        <input
+                           type="hidden"
+                           name="data_create_order"
+                           readOnly
+                           value={orderValue}
+                        />
+                        <button
+                           type="submit"
+                           name="_action"
+                           value="createOrder"
+                           className="w-full rounded bg-alternative_2 px-6 py-3 text-sm font-semibold uppercase tracking-[0.35em] text-primary shadow-lg shadow-alternative_2/40 transition hover:-translate-y-0.5 hover:bg-alternative_2/90"
+                        >
                            Proceed to payment
                         </button>
                      </fetcher.Form>
@@ -267,6 +294,6 @@ export default function CartPage() {
                </div>
             </div>
          </div>
-      </div>
+      </section>
    );
 }

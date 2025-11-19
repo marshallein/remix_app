@@ -102,6 +102,14 @@ model OrderItems {
   createdAt DateTime @default(now())
 }
 
+model Feedback {
+  id         Int      @id @default(autoincrement())
+  customer   String
+  avatarUrl  String
+  comment    String
+  createdAt  DateTime @default(now())
+}
+
 enum Tags {
   Modern
   Traditional

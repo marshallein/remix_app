@@ -31,15 +31,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
    const sort = url.searchParams.get('sort') || '';
    const page = url.searchParams.get('page') || '';
    const collectionId = url.searchParams.get('collectionId') || '';
-   const searchString = url.searchParams.get("search") || ""
+   const searchString = url.searchParams.get('search') || '';
 
    const currentPage = Math.max(Number(page || 1), 1);
 
    const option = {
       orderBy: sort
          ? {
-            price: sort as Prisma.SortOrder,
-         }
+              price: sort as Prisma.SortOrder,
+           }
          : undefined,
    };
 
@@ -52,7 +52,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       where: {
          productName: {
             contains: searchString ? searchString : undefined,
-            mode: "insensitive"
+            mode: 'insensitive',
          },
          tags: tag ? (tag as Tags) : undefined,
          Collection: {
@@ -67,14 +67,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       where: {
          productName: {
             contains: searchString ? searchString : undefined,
-            mode: "insensitive"
+            mode: 'insensitive',
          },
          tags: tag ? (tag as Tags) : undefined,
          Collection: {
             collectionCode: collectionId ? collectionId : undefined,
          },
       },
-      ...option
+      ...option,
    });
    return { products, count };
 };
@@ -117,77 +117,72 @@ export default function ProductsPage() {
       [navigate, queryParams],
    );
 
-   const handleChangeSearch = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-      const target = event.currentTarget;
-      setSearch(target.value);
-   }, [])
+   const handleChangeSearch = useCallback(
+      (event: React.ChangeEvent<HTMLInputElement>) => {
+         const target = event.currentTarget;
+         setSearch(target.value);
+      },
+      [],
+   );
 
    const onClickSearchButton = useCallback(() => {
-
       const previousQuery = new URLSearchParams(queryParams);
       if (previousQuery.has('search')) previousQuery.delete('search');
       search && previousQuery.append('search', search);
       navigate(`?${previousQuery.toString()}`);
-
-   }, [navigate, queryParams, search])
+   }, [navigate, queryParams, search]);
 
    const totalPages = Math.ceil(count / PRODUCTS_PER_PAGE);
 
-   return (
-      <div className="container">
-         <SliderCarousel images={bannerImage} />
-         <br />
-         <div className="row">
-            <div className="col-md-3">
-               <h5>Categories</h5>
-               <ul className="list-unstyled">
-                  <li>
-                     <button
-                        className="category-link"
-                        onClick={() => {
-                           handleSetTags('Modern');
-                        }}
-                     >
-                        {tag === Tags['Modern'] && <FaAngleRight />} Modern Ao
-                        Dai
-                     </button>
-                  </li>
-                  <li>
-                     <button
-                        className="category-link"
-                        onClick={() => {
-                           handleSetTags('Traditional');
-                        }}
-                     >
-                        {tag === Tags['Traditional'] && <FaAngleRight />}
-                        Traditional Ao Dai
-                     </button>
-                  </li>
-                  <li>
-                     <button
-                        className="category-link"
-                        onClick={() => {
-                           handleSetTags('Long_Dress');
-                        }}
-                     >
-                        {tag === Tags['Long_Dress'] && <FaAngleRight />} Long
-                        Dress
-                     </button>
-                  </li>
-                  <li>
-                     <button
-                        className="category-link"
-                        onClick={() => {
-                           handleSetTags('Five_Panel');
-                        }}
-                     >
-                        {tag === Tags['Five_Panel'] && <FaAngleRight />}
-                        Five-panel Ao Dai
-                     </button>
-                  </li>
-               </ul>
+   const categories = [
+      { label: 'Modern Ao Dai', value: 'Modern' as Tags },
+      { label: 'Traditional Ao Dai', value: 'Traditional' as Tags },
+      { label: 'Long Dress', value: 'Long_Dress' as Tags },
+      { label: 'Five-panel Ao Dai', value: 'Five_Panel' as Tags },
+   ];
 
-               <h5>Price</h5>
+   return (
+      <div className="min-h-screen bg-white">
+         <div className="mx-auto max-w-6xl space-y-10 px-4 py-12 sm:px-6 lg:px-0">
+            <div className="rounded border border-white/60 bg-white/80 p-4 shadow-2xl shadow-primary/25 backdrop-blur">
+               <SliderCarousel images={bannerImage} />
+            </div>
+            <div className="grid gap-10 lg:grid-cols-[280px,1fr]">
+               <aside className="space-y-8 rounded border border-secondary/30 bg-white/80 p-6 shadow-xl shadow-secondary/20">
+                  <div className="space-y-2">
+                     <p className="text-xs uppercase tracking-[0.45em] text-secondary">
+                        Filter
+                     </p>
+                     <h3 className="text-2xl font-light text-alternative_2">
+                        Categories
+                     </h3>
+                  </div>
+                  <ul className="space-y-2">
+                     {categories.map((category) => (
+                        <li key={category.value}>
+                           <button
+                              className={`w-full rounded border border-alternative_1/20 px-4 py-3 text-left text-sm font-semibold transition hover:border-secondary hover:bg-secondary/20 ${
+                                 tag === category.value
+                                    ? 'bg-secondary/40 text-alternative_2'
+                                    : 'text-alternative_1'
+                              }`}
+                              onClick={() => {
+                                 handleSetTags(category.value);
+                              }}
+                           >
+                              <span className="inline-flex items-center gap-2">
+                                 {tag === category.value && (
+                                    <FaAngleRight className="text-alternative_2" />
+                                 )}
+                                 {category.label}
+                              </span>
+                           </button>
+                        </li>
+                     ))}
+                  </ul>
+
+                  {/* TODO: implement price rang sort */}
+                  {/* <h5>Price</h5>
                <ul className="list-unstyled">
                   <li>
                      <input type="checkbox" /> Under 100,000
@@ -201,120 +196,127 @@ export default function ProductsPage() {
                   <li>
                      <input type="checkbox" /> Above 500,000
                   </li>
-               </ul>
+               </ul> */}
 
-               {/* TODO: implement this later */}
-               {/* <h5>Size</h5>
+                  {/* TODO: implement this later */}
+                  {/* <h5>Size</h5>
                 <p>S | M | L | XL | XXL</p> */}
-            </div>
+               </aside>
 
-            <div className="col-md-9">
-               <div className="d-flex justify-content-between align-items-center mb-3 gap-3">
-                  <h3>Product Listing</h3>
-                  <div className="input-group">
-                     <input type="text" name='searchBar' className="form-control" value={search} onChange={(e) => { handleChangeSearch(e) }} placeholder="Search" aria-label="Recipient's username" aria-describedby="button-addon2" />
-                     <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={onClickSearchButton}>Search</button>
-                  </div>
-                  <div className="dropdown">
-                     <button
-                        className="btn btn-secondary dropdown-toggle"
-                        type="button"
-                        id="sortDropdown"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                     >
-                        Sort
-                     </button>
-                     <ul
-                        className="dropdown-menu"
-                        aria-labelledby="sortDropdown"
-                     >
-                        <li>
+               <section className="space-y-8 rounded border border-white/70 bg-white/80 p-6 shadow-2xl shadow-primary/30">
+                  <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                     <div className="flex flex-col gap-3">
+                        <p className="text-xs uppercase tracking-[0.45em] text-secondary">
+                           Product listing
+                        </p>
+                        <h3 className="text-3xl font-light text-alternative_2">
+                           Discover your next piece
+                        </h3>
+                        <p className="text-sm text-alternative_1">
+                           Displaying {products.length} of {count}
+                        </p>
+                     </div>
+                     <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center md:w-auto">
+                        <div className="flex flex-1 items-center rounded-full border border-secondary/40 bg-white/60 px-3 py-2 shadow-inner shadow-secondary/30">
+                           <input
+                              type="text"
+                              name="searchBar"
+                              className="flex-1 bg-transparent px-2 text-sm text-alternative_2 placeholder:text-alternative_1/60 focus:outline-none"
+                              value={search}
+                              onChange={(e) => {
+                                 handleChangeSearch(e);
+                              }}
+                              placeholder="Search product"
+                              aria-label="Search products"
+                           />
                            <button
-                              className="dropdown-item"
+                              className="rounded-full bg-secondary px-4 py-2 text-xs font-semibold uppercase text-alternative_2 transition hover:bg-primary"
+                              type="button"
+                              onClick={onClickSearchButton}
+                           >
+                              Search
+                           </button>
+                        </div>
+                        <div className="flex gap-3">
+                           <button
+                              className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase transition ${
+                                 sort === 'asc'
+                                    ? 'border-secondary bg-secondary/40 text-alternative_2'
+                                    : 'border-alternative_1/30 text-alternative_1 hover:border-secondary hover:text-alternative_2'
+                              }`}
                               onClick={() => {
                                  handleSetSort('asc');
                               }}
                            >
-                              Price: Low - High
+                              Price ↑
                            </button>
-                        </li>
-                        <li>
                            <button
-                              className="dropdown-item"
+                              className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase transition ${
+                                 sort === 'desc'
+                                    ? 'border-secondary bg-secondary/40 text-alternative_2'
+                                    : 'border-alternative_1/30 text-alternative_1 hover:border-secondary hover:text-alternative_2'
+                              }`}
                               onClick={() => {
                                  handleSetSort('desc');
                               }}
                            >
-                              Price: High - Low
+                              Price ↓
                            </button>
-                        </li>
-                     </ul>
-                  </div>
-               </div>
-
-               <div className="row">
-                  {sort && <p>Currently sort by {sort}</p>}
-                  <p>
-                     Displaying {products.length} of {count}
-                  </p>
-                  {products.map((item, idx) => (
-                     <div className="col-md-4 mb-4" key={idx}>
-                        <div className="card product-card">
-                           <Link className='no-underline' to={`/product/${item.id}`}>
-                              <div className="card-body text-center">
-                                 <div
-                                    className="product-image-placeholder"
-                                    style={{
-                                       borderRadius: '15px',
-                                    }}
-                                 >
-                                    <img
-                                       className="products-product-item img-thumbnail"
-                                       src={
-                                          item.mainImageString ||
-                                          IMAGE_FALL_BACK_URL
-                                       }
-                                       alt="product"
-                                    />
-                                 </div>
-                                 <h5 className="card-title">
-                                    <p
-                                       className="no-underline"
-                                    >
-                                       {item.productName}
-                                    </p>
-                                 </h5>
-                                 <p className="card-text">
-                                    <Link
-                                       to={`/product/${item.id}`}
-                                       className="no-underline"
-                                    >{`${item.price.toLocaleString()}$`}</Link>
-                                 </p>
-                                 {item.salePercent !== 0 && (
-                                    <div className="sale-badge">
-                                       {item.salePercent}% OFF
-                                    </div>
-                                 )}
-                                 <div className="d-flex justify-content-center mt-3">
-                                    <a href="shoppingcart.html">
-                                       <button className="btn btn-danger me-2">
-                                          Add to Cart
-                                       </button>
-                                    </a>
-                                    <a href="checkout.html">
-                                       <button className="btn btn-secondary">
-                                          Buy Now
-                                       </button>
-                                    </a>
-                                 </div>
-                              </div>
-                           </Link>
                         </div>
                      </div>
-                  ))}
-               </div>
-               {totalPages > 1 && <Pagination totalPages={totalPages} />}
+                  </div>
+
+                  {sort && (
+                     <p className="text-xs uppercase tracking-[0.4em] text-secondary">
+                        Sorting by price{' '}
+                        {sort === 'asc' ? 'Low -> High' : 'High -> Low'}
+                     </p>
+                  )}
+
+                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                     {products.map((item, idx) => (
+                        <Link
+                           className="group flex h-full flex-col rounded border border-secondary/30 bg-white/90 p-4 shadow-lg shadow-secondary/20 transition hover:-translate-y-1 hover:bg-white"
+                           key={idx}
+                           to={`/product/${item.id}`}
+                        >
+                           <div className="relative h-64 overflow-hidden rounded bg-secondary/20">
+                              <img
+                                 className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                                 src={
+                                    item.mainImageString || IMAGE_FALL_BACK_URL
+                                 }
+                                 alt="product"
+                              />
+                              {item.salePercent !== 0 && (
+                                 <div className="absolute left-4 top-4 rounded-full bg-rose-500/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-white">
+                                    {item.salePercent}% off
+                                 </div>
+                              )}
+                           </div>
+                           <div className="mt-5 flex flex-1 flex-col justify-between gap-2 box-border">
+                              <h5 className="text-sm font-semibold text-alternative_2">
+                                 {item.productName}
+                              </h5>
+                              <p className="text-sm uppercase tracking-[0.4em] text-alternative_1">
+                                 {item.price.toLocaleString()} VND
+                              </p>
+                              <div className="flex justify-between text-xs text-alternative_1">
+                                 <span>Tap to view details</span>
+                                 <span className="text-secondary">
+                                    View product
+                                 </span>
+                              </div>
+                           </div>
+                        </Link>
+                     ))}
+                  </div>
+                  {totalPages > 1 && (
+                     <div className="pt-6">
+                        <Pagination totalPages={totalPages} />
+                     </div>
+                  )}
+               </section>
             </div>
          </div>
       </div>

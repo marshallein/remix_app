@@ -10,3 +10,20 @@ body {
       color-scheme: dark;
    }
 }
+
+.feedback-scroll::-webkit-scrollbar {
+   width: 6px;
+}
+
+.feedback-scroll::-webkit-scrollbar-track {
+   @apply bg-white/40 rounded;
+}
+
+.feedback-scroll::-webkit-scrollbar-thumb {
+   @apply bg-secondary/50 rounded;
+}
+
+.feedback-scroll {
+   scrollbar-width: thin;
+   scrollbar-color: theme('colors.secondary') transparent;
+}

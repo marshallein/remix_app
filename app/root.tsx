@@ -12,16 +12,14 @@ import type {
    LoaderFunctionArgs,
 } from '@remix-run/node';
 
-// import "./tailwind.css";
-import './main.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import './tailwind.css';
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 
 import HeaderComponent from './components/Layout/Header';
 import FooterComponent from './components/Layout/Footer';
-import { useEffect } from 'react';
 import { getUser, logout } from './modules/server/auth.server';
+import { getUserCartInfo } from './modules/server/user.server';
 
 export const links: LinksFunction = () => [
    {
@@ -41,8 +39,12 @@ export const links: LinksFunction = () => [
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
    const user = await getUser(request);
+   const cartItemCount = await getUserCartInfo(String(user?.id || 0));
 
-   return json({ user });
+   return json({
+      user,
+      cartItemCount: cartItemCount?.CartItems.length,
+   });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -51,15 +53,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export function Layout({ children }: { children: React.ReactNode }) {
    const data = useLoaderData<typeof loader>();
-
-   useEffect(() => {
-      // Dynamically import Bootstrap's JS only on the clients
-      import(
-         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-         // @ts-ignore
-         'bootstrap/dist/js/bootstrap.bundle'
-      );
-   }, []);
 
    return (
       <html lang="en">
@@ -72,8 +65,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Meta />
             <Links />
          </head>
-         <body>
-            <HeaderComponent user={data?.user} />
+         <body className="bg-white">
+            <HeaderComponent
+               user={data?.user}
+               cartItemCount={data?.cartItemCount}
+            />
             {children}
             <FooterComponent />
             <Scripts />
