@@ -22,7 +22,7 @@ export const getProductsByPromotion = async (
       where: {
          promotion: promotion,
       },
-      take: 4,
+      take: 10,
    });
 };
 

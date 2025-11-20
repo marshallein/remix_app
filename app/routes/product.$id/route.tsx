@@ -4,7 +4,12 @@ import {
    LoaderFunctionArgs,
    redirect,
 } from '@remix-run/node';
-import { MetaFunction, useFetcher, useLoaderData, Link } from '@remix-run/react';
+import {
+   MetaFunction,
+   useFetcher,
+   useLoaderData,
+   Link,
+} from '@remix-run/react';
 import { Product } from '@prisma/client';
 import { useCallback, useMemo, useState } from 'react';
 import _ from 'lodash';
@@ -31,7 +36,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
    const user = await getUser(request);
 
    if (!user) {
-      return redirect("/login");
+      return redirect('/login');
    }
 
    const data = await request.formData();
@@ -82,10 +87,9 @@ export default function ProductDetail() {
 
    const imagesSet = useMemo(() => {
       if (data) {
-         return [
-            ...data.product.imageSet,
-            data.product.mainImageString,
-         ].filter(Boolean) as string[];
+         return [...data.product.imageSet, data.product.mainImageString].filter(
+            Boolean,
+         ) as string[];
       } else {
          return [IMAGE_FALL_BACK_URL];
       }
@@ -100,7 +104,6 @@ export default function ProductDetail() {
       } else {
          return null;
       }
-
    }, [data?.product.price, data?.product.salePercent]);
 
    const recommendations = useMemo(() => {
@@ -260,7 +263,10 @@ export default function ProductDetail() {
                   </div>
 
                   <div className="flex flex-wrap gap-4">
-                     <fetcher.Form method="post" className="flex-1 min-w-[160px]">
+                     <fetcher.Form
+                        method="post"
+                        className="flex-1 min-w-[160px]"
+                     >
                         <input
                            type="hidden"
                            name="quantity"
@@ -283,7 +289,10 @@ export default function ProductDetail() {
                         </button>
                      </fetcher.Form>
 
-                     <fetcher.Form method="post" className="flex-1 min-w-[160px]">
+                     <fetcher.Form
+                        method="post"
+                        className="flex-1 min-w-[160px]"
+                     >
                         <input
                            type="hidden"
                            name="quantity"
