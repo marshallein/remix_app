@@ -1,18 +1,19 @@
 import { Link } from '@remix-run/react';
 import { FC } from 'react';
+import { FOOTER_BACKGROUND_IMAGE, LOGO_IMAGE } from '~/constants/images';
 
 const FooterComponent: FC = () => {
    return (
       <footer className="bg-alternative_2 text-primary">
          <div
             className="w-full h-[300px] bg-cover bg-center"
-            style={{ backgroundImage: "url('/poster_footer_main.jpeg')" }}
+            style={{ backgroundImage: `url('${FOOTER_BACKGROUND_IMAGE}')` }}
          />
          <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-0">
             <div className="flex flex-col gap-10 lg:flex-row lg:justify-between lg:gap-0">
                <div className="space-y-5 lg:max-w-sm">
                   <img
-                     src="/logo.jpg"
+                     src={LOGO_IMAGE}
                      alt="Logo"
                      className="h-14 w-auto rounded border border-white/30 bg-white/80 p-2"
                   />

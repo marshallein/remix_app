@@ -4,6 +4,11 @@ import { useCallback, useRef, useState } from 'react';
 import { ReasonComponent } from '~/components/Layout/Reason';
 import SliderCarousel from '~/components/Slider';
 import SmallSliderCarousel from '~/components/SmallSlider';
+import {
+   COLLECTION_POSTER_IMAGES,
+   HOME_BANNER_IMAGES,
+   LANDING_PAGE_IMAGE,
+} from '~/constants/images';
 import { IMAGE_FALL_BACK_URL } from '~/modules/domain';
 import { getCollectionInfo } from '~/modules/server/collection.server';
 import { getAllFeedbacks } from '~/modules/server/feedback.server';
@@ -15,13 +20,6 @@ import {
 export const meta: MetaFunction = () => {
    return [{ title: 'Home Page' }];
 };
-
-const bannerImage: string[] = [
-   '/banner.jpg',
-   '/banner1.jpg',
-   '/poster.jpg',
-   '/poster1.jpg',
-];
 
 const tagTabs = [
    { label: 'Modern Ao Dai', value: 'Modern' },
@@ -96,28 +94,54 @@ export default function Index() {
                </Link>
             ))}
          </div>
+         {/* Big landing page */}
+         <div className="relative h-[650px] -mx-4 sm:-mx-6 lg:-mx-12">
+            <img
+               src={LANDING_PAGE_IMAGE}
+               alt="landing_page"
+               className="h-full w-full object-cover"
+            />
+            <div
+               id="landing-page-button"
+               className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/60 via-black/40 to-transparent px-4 text-center sm:justify-end sm:px-12 sm:text-right"
+            >
+               <div className="flex w-full max-w-3xl flex-col items-center space-y-6 text-primary sm:items-end">
+                  <div className="space-y-2">
+                     <p className="text-xs uppercase tracking-[0.4em] text-primary/80 sm:text-sm">
+                        Timeless Collection
+                     </p>
+                     <h1 className="text-3xl font-light uppercase tracking-[0.25em] text-primary sm:text-5xl">
+                        with more elegance reimagined
+                     </h1>
+                     <p className="text-sm text-primary/90 sm:text-base">
+                        Discover handcrafted Ao Dai designs blending heritage
+                        with modern silhouettes. Limited pieces available now.
+                     </p>
+                  </div>
+                  <Link
+                     className="rounded-full bg-primary/90 px-6 py-3 text-base font-semibold uppercase tracking-[0.2em] text-alternative_2 shadow-xl shadow-black/30 transition hover:-translate-y-1 hover:bg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/70 sm:px-8 sm:text-lg"
+                     aria-label="Shop the latest collection"
+                     to="/products"
+                  >
+                     Shop Now
+                  </Link>
+               </div>
+            </div>
+         </div>
 
-         <div className="w-full rounded border border-white/50 bg-white/70 p-4 shadow-xl shadow-[0_25px_70px_rgba(0,0,0,0.07)] backdrop-blur">
-            <SliderCarousel images={bannerImage} />
+         <div className="w-full rounded border border-white/50 bg-white/70 p-4 shadow-[0_25px_70px_rgba(0,0,0,0.07)] backdrop-blur">
+            <SliderCarousel images={HOME_BANNER_IMAGES} />
          </div>
 
          {/* <!-- Best Seller Product Section --> */}
          <section className="space-y-6">
-            <div className="flex items-end justify-between">
-               <div>
-                  <p className="text-xs uppercase tracking-[0.4em] text-alternative_1">
-                     Featured
-                  </p>
-                  <h2 className="text-4xl font-light text-alternative_2">
-                     Best Seller Product
-                  </h2>
-               </div>
-               <Link
-                  to="/products?promotion=Best_Seller"
-                  className="rounded border border-alternative_2/20 px-4 py-2 text-sm font-semibold text-alternative_2 transition hover:bg-alternative_2 hover:text-primary"
-               >
-                  View all
-               </Link>
+            <div className="flex flex-col items-center justify-center">
+               <p className="text-xs uppercase tracking-[0.4em] text-alternative_1">
+                  Featured
+               </p>
+               <h2 className="text-4xl font-light text-alternative_2">
+                  Best Seller Product
+               </h2>
             </div>
             <div className="grid gap-6 md:grid-cols-4">
                {bestSellerProduct.map((product, idx) => (
@@ -160,6 +184,14 @@ export default function Index() {
                   </div>
                ))}
             </div>
+            <div className="flex justify-center">
+               <Link
+                  to="/products?promotion=Best_Seller"
+                  className="rounded border border-alternative_2/20 px-7 py-3 text-lg font-semibold bg-white text-alternative_2 transition hover:bg-alternative_2 hover:text-primary"
+               >
+                  View all Best Seller Items
+               </Link>
+            </div>
          </section>
 
          {/* <!-- Traditional Collection Section --> */}
@@ -185,20 +217,18 @@ export default function Index() {
                      </Link>
                   </div>
                   <div className="grid gap-4 md:grid-cols-2">
-                     <div className="h-[280px] overflow-hidden rounded">
-                        <img
-                           src="/poster.jpg"
-                           alt="Traditional Collection 1"
-                           className="h-full w-full object-cover"
-                        />
-                     </div>
-                     <div className="h-[280px] overflow-hidden rounded">
-                        <img
-                           src="/poster1.jpg"
-                           alt="Traditional Collection 2"
-                           className="h-full w-full object-cover"
-                        />
-                     </div>
+                     {COLLECTION_POSTER_IMAGES.map((imageSrc, index) => (
+                        <div
+                           key={imageSrc}
+                           className="h-[280px] overflow-hidden rounded"
+                        >
+                           <img
+                              src={imageSrc}
+                              alt={`Traditional Collection ${index + 1}`}
+                              className="h-full w-full object-cover"
+                           />
+                        </div>
+                     ))}
                   </div>
                </div>
             </section>

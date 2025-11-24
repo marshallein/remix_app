@@ -13,13 +13,7 @@ import SliderCarousel from '~/components/Slider';
 import { prisma } from '~/modules/server/db.server';
 import { IMAGE_FALL_BACK_URL, PRODUCTS_PER_PAGE } from '~/modules/domain';
 import { FaAngleRight } from 'react-icons/fa';
-
-const bannerImage: string[] = [
-   '/banner.jpg',
-   '/banner1.jpg',
-   '/poster.jpg',
-   '/poster1.jpg',
-];
+import { HOME_BANNER_IMAGES } from '~/constants/images';
 
 export const meta: MetaFunction = () => {
    return [{ title: 'Products' }];
@@ -82,7 +76,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function ProductsPage() {
    const [tag, setTag] = useState<Tags>();
    const [sort, setSort] = useState<Prisma.SortOrder>();
-   const [search, setSearch] = useState<string>();
+   const [search, setSearch] = useState<string>('');
+   const [isFilterOpen, setIsFilterOpen] = useState(false);
    const navigate = useNavigate();
    const [queryParams] = useSearchParams();
    const { products, count } = useLoaderData<typeof loader>();
@@ -132,6 +127,14 @@ export default function ProductsPage() {
       navigate(`?${previousQuery.toString()}`);
    }, [navigate, queryParams, search]);
 
+   const openFilterDrawer = useCallback(() => {
+      setIsFilterOpen(true);
+   }, []);
+
+   const closeFilterDrawer = useCallback(() => {
+      setIsFilterOpen(false);
+   }, []);
+
    const totalPages = Math.ceil(count / PRODUCTS_PER_PAGE);
 
    const categories = [
@@ -141,15 +144,12 @@ export default function ProductsPage() {
       { label: 'Five-panel Ao Dai', value: 'Five_Panel' as Tags },
    ];
 
-   return (
-      <div className="min-h-screen bg-white">
-         <div className="mx-auto max-w-6xl space-y-10 px-4 py-12 sm:px-6 lg:px-0">
-            <div className="rounded border border-white/60 bg-white/80 p-4 shadow-2xl shadow-primary/25 backdrop-blur">
-               <SliderCarousel images={bannerImage} />
-            </div>
-            <div className="grid gap-10 lg:grid-cols-[280px,1fr]">
-               <aside className="space-y-8 rounded border border-secondary/30 bg-white/80 p-6 shadow-xl shadow-secondary/20">
-                  <div className="space-y-2">
+   const FilterPanel = ({ onClose }: { onClose?: () => void }) => {
+      return (
+         <div className="space-y-8">
+            <div className="space-y-2">
+               <div className="flex items-center justify-between">
+                  <div>
                      <p className="text-xs uppercase tracking-[0.45em] text-secondary">
                         Filter
                      </p>
@@ -157,53 +157,69 @@ export default function ProductsPage() {
                         Categories
                      </h3>
                   </div>
-                  <ul className="space-y-2">
-                     {categories.map((category) => (
-                        <li key={category.value}>
-                           <button
-                              className={`w-full rounded border border-alternative_1/20 px-4 py-3 text-left text-sm font-semibold transition hover:border-secondary hover:bg-secondary/20 ${
-                                 tag === category.value
-                                    ? 'bg-secondary/40 text-alternative_2'
-                                    : 'text-alternative_1'
-                              }`}
-                              onClick={() => {
-                                 handleSetTags(category.value);
-                              }}
-                           >
-                              <span className="inline-flex items-center gap-2">
-                                 {tag === category.value && (
-                                    <FaAngleRight className="text-alternative_2" />
-                                 )}
-                                 {category.label}
-                              </span>
-                           </button>
-                        </li>
-                     ))}
-                  </ul>
+                  {onClose && (
+                     <button
+                        className="rounded-full border border-secondary/40 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-secondary transition hover:bg-secondary/10"
+                        type="button"
+                        onClick={onClose}
+                     >
+                        Close
+                     </button>
+                  )}
+               </div>
+               <p className="text-sm text-alternative_1/80">
+                  Choose a silhouette to refine your results.
+               </p>
+            </div>
+            <ul className="space-y-2">
+               {categories.map((category) => (
+                  <li key={category.value}>
+                     <button
+                        className={`w-full rounded border border-alternative_1/20 px-4 py-3 text-left text-sm font-semibold transition hover:border-secondary hover:bg-secondary/20 ${
+                           tag === category.value
+                              ? 'bg-secondary/40 text-alternative_2'
+                              : 'text-alternative_1'
+                        }`}
+                        onClick={() => {
+                           handleSetTags(category.value);
+                           onClose?.();
+                        }}
+                     >
+                        <span className="inline-flex items-center gap-2">
+                           {tag === category.value && (
+                              <FaAngleRight className="text-alternative_2" />
+                           )}
+                           {category.label}
+                        </span>
+                     </button>
+                  </li>
+               ))}
+            </ul>
+         </div>
+      );
+   };
 
-                  {/* TODO: implement price rang sort */}
-                  {/* <h5>Price</h5>
-               <ul className="list-unstyled">
-                  <li>
-                     <input type="checkbox" /> Under 100,000
-                  </li>
-                  <li>
-                     <input type="checkbox" /> 100,000 - 200,000
-                  </li>
-                  <li>
-                     <input type="checkbox" /> 200,000 - 500,000
-                  </li>
-                  <li>
-                     <input type="checkbox" /> Above 500,000
-                  </li>
-               </ul> */}
-
-                  {/* TODO: implement this later */}
-                  {/* <h5>Size</h5>
-                <p>S | M | L | XL | XXL</p> */}
+   return (
+      <div className="min-h-screen bg-white">
+         {isFilterOpen && (
+            <div
+               className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden"
+               onClick={closeFilterDrawer}
+               aria-hidden="true"
+            />
+         )}
+         <div className="mx-auto max-w-6xl space-y-10 py-10 md:px-4 sm:px-6 lg:px-0">
+            <div className="rounded border border-white/60 bg-white/80 p-4 shadow-2xl shadow-primary/25 backdrop-blur">
+               <SliderCarousel images={HOME_BANNER_IMAGES} />
+            </div>
+            <div className="grid gap-10 lg:grid-cols-[280px,1fr]">
+               <aside className="hidden lg:block lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)] lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto lg:pr-2">
+                  <div className="space-y-8 rounded border border-secondary/30 bg-white/80 p-4 shadow-xl shadow-secondary/20 sm:p-6">
+                     <FilterPanel />
+                  </div>
                </aside>
 
-               <section className="space-y-8 rounded border border-white/70 bg-white/80 p-6 shadow-2xl shadow-primary/30">
+               <section className="space-y-8 rounded border border-white/70 bg-white/80 p-4 shadow-2xl shadow-primary/30 sm:p-6">
                   <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                      <div className="flex flex-col gap-3">
                         <p className="text-xs uppercase tracking-[0.45em] text-secondary">
@@ -216,8 +232,8 @@ export default function ProductsPage() {
                            Displaying {products.length} of {count}
                         </p>
                      </div>
-                     <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center md:w-auto">
-                        <div className="flex flex-1 items-center rounded-full border border-secondary/40 bg-white/60 px-3 py-2 shadow-inner shadow-secondary/30">
+                     <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-center md:w-auto">
+                        <div className="flex w-full flex-col gap-2 rounded-3xl border border-secondary/40 bg-white/60 px-3 py-2 shadow-inner shadow-secondary/30 sm:flex-row sm:items-center">
                            <input
                               type="text"
                               name="searchBar"
@@ -230,16 +246,23 @@ export default function ProductsPage() {
                               aria-label="Search products"
                            />
                            <button
-                              className="rounded-full bg-secondary px-4 py-2 text-xs font-semibold uppercase text-alternative_2 transition hover:bg-primary"
+                              className="w-full rounded-full bg-secondary px-4 py-2 text-xs font-semibold uppercase text-alternative_2 transition hover:bg-primary sm:w-auto"
                               type="button"
                               onClick={onClickSearchButton}
                            >
                               Search
                            </button>
                         </div>
-                        <div className="flex gap-3">
+                        <button
+                           className="w-full rounded-full border border-secondary/40 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-alternative_2 transition hover:bg-secondary/20 sm:hidden"
+                           type="button"
+                           onClick={openFilterDrawer}
+                        >
+                           Open Filters
+                        </button>
+                        <div className="flex flex-wrap gap-3 sm:flex-nowrap">
                            <button
-                              className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase transition ${
+                              className={`flex-1 rounded-full border px-4 py-2 text-xs font-semibold uppercase transition sm:flex-none ${
                                  sort === 'asc'
                                     ? 'border-secondary bg-secondary/40 text-alternative_2'
                                     : 'border-alternative_1/30 text-alternative_1 hover:border-secondary hover:text-alternative_2'
@@ -251,7 +274,7 @@ export default function ProductsPage() {
                               Price ↑
                            </button>
                            <button
-                              className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase transition ${
+                              className={`flex-1 rounded-full border px-4 py-2 text-xs font-semibold uppercase transition sm:flex-none ${
                                  sort === 'desc'
                                     ? 'border-secondary bg-secondary/40 text-alternative_2'
                                     : 'border-alternative_1/30 text-alternative_1 hover:border-secondary hover:text-alternative_2'
@@ -289,7 +312,7 @@ export default function ProductsPage() {
                                  alt="product"
                               />
                               {item.salePercent !== 0 && (
-                                 <div className="absolute left-4 top-4 rounded-full bg-rose-500/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-white">
+                                 <div className="absolute left-2 top-2 rounded-full bg-rose-500/80 px-2.5 py-1 text-[0.55rem] font-semibold uppercase tracking-[0.18em] text-white sm:left-4 sm:top-4 sm:px-3 sm:text-xs sm:tracking-[0.35em]">
                                     {item.salePercent}% off
                                  </div>
                               )}
@@ -317,6 +340,17 @@ export default function ProductsPage() {
                      </div>
                   )}
                </section>
+            </div>
+         </div>
+         <div
+            className={`fixed top-4 bottom-4 left-0 z-50 w-11/12 max-w-sm transform overflow-hidden rounded-r-3xl border border-secondary/30 bg-white/95 p-4 shadow-2xl shadow-secondary/30 transition-transform duration-300 sm:top-6 sm:bottom-6 sm:p-6 lg:hidden ${
+               isFilterOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}
+            aria-hidden={!isFilterOpen}
+            aria-label="Mobile filters"
+         >
+            <div className="flex h-full flex-col overflow-y-auto pr-1">
+               <FilterPanel onClose={closeFilterDrawer} />
             </div>
          </div>
       </div>

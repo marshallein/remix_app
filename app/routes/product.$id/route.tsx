@@ -17,6 +17,7 @@ import { IMAGE_FALL_BACK_URL } from '~/modules/domain';
 import { getProductById } from '~/modules/server/product.server';
 import { addToCart, AddToCartType } from '~/modules/server/user.server';
 import { getUser } from '~/modules/server/auth.server';
+import { PRODUCT_RECOMMENDATION_IMAGE } from '~/constants/images';
 
 export const meta: MetaFunction = () => {
    return [{ title: 'Product Page' }];
@@ -125,7 +126,7 @@ export default function ProductDetail() {
             title: 'Seasonal picks',
             description: 'Limited-color capsules arriving weekly.',
             href: '/products?promotion=Best_Seller',
-            image: '/poster1.jpg',
+            image: PRODUCT_RECOMMENDATION_IMAGE,
          },
       ];
    }, [data?.product]);

@@ -28,7 +28,7 @@ const Pagination: FC<Props> = ({
    return (
       <nav
          className={[
-            'flex items-center justify-between gap-3 text-xs uppercase tracking-[0.35em]',
+            'flex items-center justify-between gap-3 text-xs uppercase ',
             className,
          ]
             .filter(Boolean)

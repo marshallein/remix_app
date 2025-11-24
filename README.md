@@ -1,67 +1,124 @@
 # eCommerce App with Remix and Prisma ORM
 
-### Index:
+### Index
 
--  Tech stack of this project.
--  How to setup and install this project ( ofc in full detail ).
+-  Tech stack used in this project.
+-  How to set up and install this project (in full detail).
 
-### Techstack:
+### Tech stack
 
--  [Remix](remix.run): a React framework use to build full stack web application.
--  [Prisma](https://www.prisma.io/): a simple ORM (Object Relational Mapping) to help simplify and easy to interact with database.
--  [Bootstrap](https://getbootstrap.com/): a css library...
--  [PostgreSQL](https://www.postgresql.org/) Database:a open source database that use in this project!
+-  [Remix](remix.run): a React framework used to build full-stack web applications.
+-  [Prisma](https://www.prisma.io/): an ORM (Object Relational Mapping) that simplifies database interactions.
+-  [Bootstrap](https://getbootstrap.com/): a CSS utility and component library.
+-  [PostgreSQL](https://www.postgresql.org/): an open-source database used in this project.
 
-### How to setup (Local Environment):
+### How to set up (local environment)
 
-#### Prerequisite:
+#### Prerequisites
 
--  Nodejs: using LTS (22.11.0) version is recommended ([how to install](https://nodejs.org/en/download/prebuilt-installer))
+-  Node.js (LTS 22.11.0 recommended). [Installation guide](https://nodejs.org/en/download/prebuilt-installer)
 -  PostgreSQL database
--  Visual Studio Code (or any code editor)
+-  Visual Studio Code (or any preferred editor)
 
 #### Steps:
 
--  [Setup](https://www.prisma.io/dataguide/postgresql/setting-up-a-local-postgresql-database) your database in PostgreSQL
--  Clone this project (or download it and simply open it in explorer)
--  Open this project with Visual Studio Code
+-  [Set up](https://www.prisma.io/dataguide/postgresql/setting-up-a-local-postgresql-database) your PostgreSQL database.
+-  Clone this project (or download it and open the folder in your file explorer).
+-  Open the project with Visual Studio Code.
 
-> **Important! remember your configuration of PostgreSQL database (port, user, password, schema)**
+> **Important! Remember your PostgreSQL configuration (port, user, password, schema).**
 
--  create the _'.env'_ file
+-  Create the `.env` file.
 
 ![.env file](https://lh3.googleusercontent.com/pw/AP1GczMHQe7Q4Kj5tspNDyrAf1hgB1BPxsSVgUR9ufUpqibWJ0Df32_bW-lXyx2lRAtwHnyPJTkSaH5PDEQQBOlR7qHOyDdqjvnxnlGVV_4-KGIwzyKvVFw-LB7LQn3fOwNfneH4vt9fR-68-2goJikJaNQy=w376-h510-s-no-gm?authuser=0)
 
--  Add DATABASE_URL value to _'.env'_ file and edit accordingly by the configuration of the PostgreSQL database (this is not your database_url but the database_url should look like this) this is your connection string, more onto that in [here](https://pris.ly/d/connection-strings)
+-  Add a `DATABASE_URL` value to `.env` and adjust it so it matches your PostgreSQL configuration. This value is your connection string; learn more [here](https://pris.ly/d/connection-strings).
 
 ![database_url](https://lh3.googleusercontent.com/pw/AP1GczPoOTjJVBoQdRhrCYV5zVLApfKcZiX3OAJELW5Wg8Z16IHSmf4s_oqtSpxrZSIcVRVf54JI8IsC4VLp5AjnlGOZJYj4OooJwdM5gGmLiLek2oUyw6knYH9GjB86YVMGT6ke_yqmLXjpgK0TABHv96cR=w720-h36-s-no-gm?authuser=0)
 
--  Add SESSSION_SECRET="supersecretvalue" to _.env_ as well, this will be your session storage key.
+-  Add `SESSION_SECRET="supersecretvalue"` to `.env` as well; this is your session storage key.
 
--  .env should look like this:
+-  `.env` should look like this:
 
 > DATABASE_URL="postgresql://postgres:1234@localhost:5432/mydb?schema=public"
 > SESSION_SECRET="supersecretvalue"
 
--  Open the terminal of the VSC (Visual Studio Code in short):
+-  Open the terminal in VS Code:
 
-   -  check to see if nodeJs are available in your computer by simply type:
+   -  Check whether Node.js is available on your computer:
       `node -v`
-   -  should appear like this when you type the command in terminal:
+   -  The output should look like this:
 
    > v18.17.1
 
-   _disclaimer: this is not the version you are currently installed, v22.11.0 is the correct one_
+   _Disclaimer: your installed version might differ; v22.11.0 is the recommended release._
 
-   -  run the next command to install the dependencies in this project
+   -  Install project dependencies:
       `npm install`
-   -  run this command to sync the prisma to database:
+   -  Sync Prisma with the database:
       `npx prisma db push`
-   -  run this command to setup snapseed:
+   -  Set up Snaplet seed:
       `npx @snaplet/seed init`
-   -  run the db seed to add data to the database:
+   -  Seed the database:
       `npx tsx prisma/seed/seed.ts`
-   -  Now you should have everything to start the local server
+   -  At this point you are ready to start the local server.
 
 -  Run this command to start the server:
    > npm run dev
+
+### Additional project information
+
+-  **Folder structure**:
+   -  `app/` contains Remix routes, components, and styles.
+   -  `prisma/` holds `schema.prisma` plus seed scripts.
+   -  `public/` includes static assets such as hero images and favicons.
+-  **Environment tips**:
+   -  When changing the Prisma schema, run `npx prisma generate` to refresh the client before starting the dev server.
+   -  Keep a `.env.example` file (not committed here) that mirrors your environment variables to help teammates onboard quickly.
+-  **Data management**:
+   -  Use `npx prisma migrate dev --name your_migration` instead of `db push` when you are ready to persist schema changes with history.
+   -  `npx prisma studio` opens a lightweight GUI to inspect or edit your PostgreSQL tables during development.
+
+### Updating static images
+
+All hard-coded image paths now live in `app/constants/images.ts`. Update this single file to change what shows up across the UI:
+
+-  **Hero + sliders**: Replace the entries in `HOME_BANNER_IMAGES`, `LANDING_PAGE_IMAGE`, or `COLLECTION_POSTER_IMAGES` to adjust the homepage and product-page carousels.
+-  **Branding**: Point `LOGO_IMAGE` and `FOOTER_BACKGROUND_IMAGE` at files inside `public/` to update the logo or footer artwork (`Header`, `Footer`, and other components import these automatically).
+-  **Content sections**: Modify `REASON_IMAGE_PATHS` for the “Why choose us” icons and `PRODUCT_RECOMMENDATION_IMAGE` for the product detail recommendations.
+
+When introducing a brand-new static asset, drop the file into `public/`, add an exported constant (or extend the relevant object) in `app/constants/images.ts`, then import that constant wherever the image is needed. This keeps the JSX free of repeated string literals and makes future swaps instant.
+
+### Update the color scheme for branding
+
+`tailwind.config.ts` consists the color scheme for the website, you can adjust and change the color from primary/ secondary color according to what you want to build your website.
+
+```js
+// update the color scheme by hex color in here
+...
+      extend: {
+         colors: {
+            primary: '#FAFFC5',
+            secondary: '#A9BFA8',
+            alternative_1: '#5E686D',
+            alternative_2: '#3A3960',
+         },
+...
+
+```
+
+_ADVANCE: this setting will be appear when you using tailwind css to configure the background color (`bg-primary`), checkout TailwindCss Document for more information_
+
+### Available npm scripts
+
+| Command        | Description                                             |
+| -------------- | ------------------------------------------------------- |
+| `npm run dev`  | Starts Remix in development with Vite for fast refresh. |
+| `npm run lint` | Runs ESLint to catch common code-quality issues.        |
+
+### Troubleshooting checklist
+
+-  **Cannot connect to the database**: verify that PostgreSQL is running and that the credentials in `DATABASE_URL` match `psql` access. If using Docker, expose the port (default `5432`) to the host.
+-  **Prisma errors about missing migrations**: run `npx prisma migrate dev` and commit the generated `prisma/migrations` folder.
+-  **Remix dev server not picking up Tailwind or CSS changes**: restart `npm run dev` to ensure Vite picks up new PostCSS configuration.
+-  **TypeScript issues after upgrading dependencies**: delete the `.cache` directory (if created) and rerun `npm install` followed by `npm run dev`.

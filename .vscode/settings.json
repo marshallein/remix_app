@@ -1,5 +1,12 @@
 {
    "editor.fontFamily": "JetBrains Mono",
    "editor.defaultFormatter": "esbenp.prettier-vscode",
-   "editor.formatOnSave": true
+   "editor.formatOnSave": true,
+   "terminal.integrated.defaultProfile.linux": "bash",
+   "terminal.integrated.profiles.linux": {
+      "zsh": null,
+      "bash": {
+         "path": "/bin/bash"
+      }
+   }
 }

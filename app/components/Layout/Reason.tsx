@@ -1,8 +1,9 @@
 import { FC } from 'react';
+import { REASON_IMAGE_PATHS } from '~/constants/images';
 
 export const ReasonComponent: FC = () => {
    return (
-      <section className="rounded border border-alternative_1/20 bg-white/90 p-8 shadow-2xl shadow-secondary/30">
+      <section className="rounded p-4">
          <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-16 text-slate-900 md:gap-12">
             <header className="text-center">
                <p className="text-sm uppercase tracking-[0.3em] text-secondary">
@@ -18,19 +19,19 @@ export const ReasonComponent: FC = () => {
                      title: 'Complimentary Shipping',
                      description:
                         'We care about your experience, so we offer shipping across of the world for all orders, big or small.',
-                     imageUrl: '/complimentary_shipping.png',
+                     imageUrl: REASON_IMAGE_PATHS.complimentaryShipping,
                   },
                   {
                      title: 'Consciously Crafted',
                      description:
                         'We prioritize handmade, small-batch production to minimize waste and support local artisans.',
-                     imageUrl: '/handle_with_care.png',
+                     imageUrl: REASON_IMAGE_PATHS.consciouslyCrafted,
                   },
                   {
                      title: 'Come Say Hi',
                      description:
                         'We love connecting with our customers! Visit us in-store for personalized service and styling tips.',
-                     imageUrl: '/come_say_hi.png',
+                     imageUrl: REASON_IMAGE_PATHS.comeSayHi,
                   },
                ].map((reason) => (
                   <article

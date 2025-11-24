@@ -1,6 +1,7 @@
 import { Link } from '@remix-run/react';
 import { FC } from 'react';
 import { FaUser, FaShoppingCart, FaSignOutAlt } from 'react-icons/fa';
+import { LOGO_IMAGE } from '~/constants/images';
 
 type Props = {
    user: {
@@ -27,7 +28,7 @@ const HeaderComponent: FC<Props> = ({ user, cartItemCount }) => {
             <div className="flex items-center gap-3">
                <a href="/" className="inline-flex items-center gap-2">
                   <img
-                     src="/logo.jpg"
+                     src={LOGO_IMAGE}
                      alt="Logo"
                      className="h-12 w-12 rounded-3xl border border-secondary/40 object-cover"
                   />
