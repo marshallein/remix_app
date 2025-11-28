@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Order" ADD COLUMN     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN     "shippingAddress" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "shippingTelephone" TEXT NOT NULL DEFAULT '';

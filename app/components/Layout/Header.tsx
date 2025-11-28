@@ -1,5 +1,5 @@
 import { Link } from '@remix-run/react';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { FaUser, FaShoppingCart, FaSignOutAlt } from 'react-icons/fa';
 import { LOGO_IMAGE } from '~/constants/images';
 
@@ -22,6 +22,10 @@ const TabLink: FC<{ to: string; label: string }> = ({ to, label }) => (
 );
 
 const HeaderComponent: FC<Props> = ({ user, cartItemCount }) => {
+   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
+   const toggleUserMenu = () => setIsUserMenuOpen((prev) => !prev);
+
    return (
       <header className="sticky top-0 z-50 bg-secondary/60 backdrop-blur shadow-sm shadow-secondary/20">
          <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-0">
@@ -58,9 +62,34 @@ const HeaderComponent: FC<Props> = ({ user, cartItemCount }) => {
                   )}
                </Link>
                {user ? (
-                  <div className="flex items-center gap-2 rounded-full border border-primary/60 bg-primary/40 px-4 py-2 text-xs font-semibold uppercase ">
-                     <FaUser />
-                     <span>Hello {user?.name}!</span>
+                  <div className="relative">
+                     <button
+                        type="button"
+                        onClick={toggleUserMenu}
+                        className="flex items-center gap-2 rounded-full border border-primary/60 bg-primary/40 px-4 py-2 text-xs font-semibold uppercase transition hover:bg-primary/60"
+                     >
+                        <FaUser />
+                        <span>Hello {user?.name}!</span>
+                     </button>
+                     {isUserMenuOpen && (
+                        <div className="absolute right-0 z-50 mt-2 w-40 rounded-md border border-alternative_1/20 bg-white py-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-alternative_2 shadow-lg shadow-alternative_1/20">
+                           <Link
+                              to="/orders"
+                              className="block px-4 py-2 text-left transition hover:bg-secondary/30"
+                              onClick={() => setIsUserMenuOpen(false)}
+                           >
+                              Orders
+                           </Link>
+                           <Link
+                              to="/logout"
+                              className="flex items-center gap-2 px-4 py-2 text-rose-500 transition hover:bg-rose-50"
+                              onClick={() => setIsUserMenuOpen(false)}
+                           >
+                              <FaSignOutAlt />
+                              <span>Logout</span>
+                           </Link>
+                        </div>
+                     )}
                   </div>
                ) : (
                   <Link
@@ -69,14 +98,6 @@ const HeaderComponent: FC<Props> = ({ user, cartItemCount }) => {
                   >
                      <FaUser />
                      <span className="hidden sm:inline">Login</span>
-                  </Link>
-               )}
-               {user && (
-                  <Link
-                     to="/logout"
-                     className="flex items-center bg-white justify-center rounded-full border border-rose-200 px-3 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-rose-500 transition hover:bg-rose-50"
-                  >
-                     <FaSignOutAlt />
                   </Link>
                )}
             </div>

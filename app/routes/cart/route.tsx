@@ -2,6 +2,7 @@ import {
    ActionFunctionArgs,
    json,
    LoaderFunctionArgs,
+   MetaFunction,
    redirect,
 } from '@remix-run/node';
 import { Link, useFetcher, useLoaderData } from '@remix-run/react';
@@ -15,8 +16,13 @@ import {
 import { FaHouse } from 'react-icons/fa6';
 import { FaTrash } from 'react-icons/fa';
 import { IMAGE_FALL_BACK_URL } from '~/modules/domain';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { createOrder, OrderPayLoad } from '~/modules/server/order.server';
+import FormInput from '~/components/FormInput';
+
+export const meta: MetaFunction = () => {
+   return [{ title: 'Cart' }];
+};
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
    const user = await getUser(request);
@@ -65,9 +71,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       case 'createOrder': {
          const dataOrder = data.get('data_create_order') || '';
          const payload = JSON.parse(dataOrder as string) as OrderPayLoad;
-         await createOrder(payload);
+         const response = await createOrder(payload);
 
-         return redirect('/thankyou');
+         if (!response?.ok) {
+            return redirect('/404');
+         } else {
+            return redirect('/thankyou');
+         }
       }
       default: {
          throw new Response('Bad Request', { status: 400 });
@@ -80,6 +90,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function CartPage() {
    const data = useLoaderData<typeof loader>();
    const fetcher = useFetcher();
+   const [checkoutDetails, setCheckoutDetails] = useState({
+      address: '',
+      phone: '',
+   });
+   const [checkoutErrors, setCheckoutErrors] = useState<{ phone?: string }>({});
 
    const totalPrice = useMemo(() => {
       if (!data.cart) return 0;
@@ -92,12 +107,13 @@ export default function CartPage() {
 
    const orderValue = useMemo<string>(() => {
       const { cart } = data;
-
       if (cart) {
-         return JSON.stringify({
+         const payload: OrderPayLoad = {
             cartId: cart.id,
             userId: cart.userId,
             totalPrice: totalPrice,
+            address: checkoutDetails.address,
+            telephone: checkoutDetails.phone,
             cartItem: cart.CartItems.map((item) => {
                return {
                   productId: item.productId,
@@ -105,11 +121,36 @@ export default function CartPage() {
                   price: item.product.price,
                };
             }),
-         });
+         };
+         return JSON.stringify(payload);
       } else {
          return JSON.stringify('');
       }
-   }, [data, totalPrice]);
+   }, [checkoutDetails.address, checkoutDetails.phone, data, totalPrice]);
+
+   const handleCheckoutDetailChange = (
+      event: React.ChangeEvent<HTMLInputElement>,
+      field: string,
+   ) => {
+      const { value } = event.target;
+      setCheckoutDetails((prev) => ({
+         ...prev,
+         [field]: value,
+      }));
+
+      if (field === 'phone') {
+         const isNumeric = /^\d*$/.test(value);
+         setCheckoutErrors((prev) => ({
+            ...prev,
+            phone: isNumeric ? '' : 'Telephone must contain digits only',
+         }));
+      }
+   };
+
+   const isCheckoutDisabled =
+      !checkoutDetails.address.trim() ||
+      !checkoutDetails.phone.trim() ||
+      Boolean(checkoutErrors.phone);
 
    return (
       <section className="min-h-screen bg-white">
@@ -213,7 +254,10 @@ export default function CartPage() {
                                     </fetcher.Form>
                                  </div>
                                  <p className="text-sm text-alternative_2">
-                                    {(item.product.price * item.quantity).toLocaleString()} VND
+                                    {(
+                                       item.product.price * item.quantity
+                                    ).toLocaleString()}{' '}
+                                    VND
                                  </p>
                               </div>
                               <fetcher.Form method="post">
@@ -274,7 +318,25 @@ export default function CartPage() {
                      </span>
                   </h5>
                   {data.cart && data.cart?.CartItems.length > 0 && (
-                     <fetcher.Form method="post" className="pt-2">
+                     <fetcher.Form method="post" className="space-y-4 pt-2">
+                        <FormInput
+                           htmlFor="address"
+                           id="address"
+                           label="Shipping address"
+                           value={checkoutDetails.address}
+                           onchange={handleCheckoutDetailChange}
+                           required
+                        />
+                        <FormInput
+                           htmlFor="phone"
+                           id="phone"
+                           label="Telephone number"
+                           type="tel"
+                           value={checkoutDetails.phone}
+                           onchange={handleCheckoutDetailChange}
+                           required
+                           errors={checkoutErrors.phone}
+                        />
                         <input
                            type="hidden"
                            name="data_create_order"
@@ -285,7 +347,8 @@ export default function CartPage() {
                            type="submit"
                            name="_action"
                            value="createOrder"
-                           className="w-full rounded bg-alternative_2 px-6 py-3 text-sm font-semibold uppercase tracking-[0.35em] text-primary shadow-lg shadow-alternative_2/40 transition hover:-translate-y-0.5 hover:bg-alternative_2/90"
+                           disabled={isCheckoutDisabled}
+                           className="w-full rounded bg-alternative_2 px-6 py-3 text-sm font-semibold uppercase tracking-[0.35em] text-primary shadow-lg shadow-alternative_2/40 transition hover:-translate-y-0.5 hover:bg-alternative_2/90 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:bg-alternative_2"
                         >
                            Proceed to payment
                         </button>
