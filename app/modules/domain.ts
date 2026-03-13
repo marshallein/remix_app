@@ -37,3 +37,9 @@ export const generateRandomId = (length = 8) => {
    }
    return result;
 }
+
+export const generateCouponCode = () => {
+   const prefix = 'WELCOME';
+   const randomPart = generateRandomId(6).toUpperCase();
+   return `${prefix}${randomPart}`;
+};

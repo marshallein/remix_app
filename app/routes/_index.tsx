@@ -343,6 +343,7 @@ export default function Index() {
                   Stories from the community
                </h2>
             </div>
+            {/* TODO: implement the feedback function */}
             <div className="mt-8 flex gap-6 overflow-x-auto pb-4">
                {feedbacks.map((item, index) => (
                   <div
